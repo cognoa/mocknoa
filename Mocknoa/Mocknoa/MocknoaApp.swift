@@ -10,11 +10,12 @@ import Vapor
 
 @main
 struct MocknoaApp: App {
-    var serverApp: Application?
-
+    var serverApp = try? VaporFactory.generateServer()
+//    var serverApp2 = try? VaporFactory.generateServer()
     init() {
-        self.serverApp = try? VaporFactory.generateServer()
+
     }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

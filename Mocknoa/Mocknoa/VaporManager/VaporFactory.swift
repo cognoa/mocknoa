@@ -10,14 +10,16 @@ import Vapor
 
 public class VaporFactory {
 
-    public static func generateServer() throws -> Application {
-        var env = try Environment.detect()
-        try LoggingSystem.bootstrap(from: &env)
-        let app = Application(env)
-//        defer { app.shutdown() }
-        try configure(app: app)
-        try app.run()
-        return app
+    public static func generateServer() {
+        DispatchQueue.global().async {
+            guard var env = try? Environment.detect() else { return }
+            try? LoggingSystem.bootstrap(from: &env)
+            let app = Application(env)
+            defer { app.shutdown() }
+            try? configure(app: app)
+            try? app.run()
+//            return app
+        }
     }
 
     public static func configure( app: Application) throws {

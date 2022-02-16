@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State var currentServer = Server(name: "Server 331", port: 0331, endpoints: [])
+    @State var selectedEndpoint: Endpoint?
 
     let servers: [Server] = [
         .init(name: "Server 331", port: 0331, endpoints: []),
@@ -21,10 +22,11 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             // List of Servers
-            SidebarView(currentServer: $currentServer, servers: servers)
+            SidebarView(currentServer: $currentServer, selectedEndpoint: $selectedEndpoint, servers: servers)
             // List of currentServer's endpoints
-            ServerConfigurationPane(currentServer: $currentServer)
-            JSONInputTextEditor()
+            ServerConfigurationPane(currentServer: $currentServer, selectedEndpoint: $selectedEndpoint)
+            // Endpoint configuration View
+            EndpointDetailView(endpoint: $selectedEndpoint)
         }
         // Allows the mac app window to be resizable,
         // while it won't shrink smaller than the min size set here
@@ -32,9 +34,11 @@ struct ContentView: View {
     }
 }
 
+/// List of current Servers
 struct SidebarView: View {
     @State private var isDefaultItemActive = true
     @Binding var currentServer: Server
+    @Binding var selectedEndpoint: Endpoint?
     let servers: [Server]
 
     private func getDummyEndpoints() -> [Endpoint] {
@@ -53,9 +57,11 @@ struct SidebarView: View {
                     Spacer()
                 }
                 .padding(8)
+                // Select a server
                 .onTapGesture {
                     if currentServer != server {
                         currentServer = server
+                        selectedEndpoint = nil
                     }
                     if currentServer == servers[1] {
                         currentServer.endpoints = getDummyEndpoints()
@@ -65,14 +71,6 @@ struct SidebarView: View {
             .listStyle(SidebarListStyle()) // Gives you this sweet sidebar look
             Spacer()
         }
-    }
-}
-
-struct JSONInputTextEditor: View {
-    @State var text: String = "Test JSON"
-    var body: some View {
-        Text("Input JSON Below")
-        TextEditor(text: $text)
     }
 }
 
