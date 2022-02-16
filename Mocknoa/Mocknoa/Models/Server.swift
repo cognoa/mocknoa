@@ -8,6 +8,7 @@
 import Foundation
 
 public struct Server: Codable, Hashable {
+    public var id = UUID().uuidString
     public var name: String
     public var port: UInt
     public var endpoints: [Endpoint]

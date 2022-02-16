@@ -6,7 +6,8 @@
 //
 
 import Foundation
+import Vapor
 
-public struct GlobalEnvironment: Codable {
-    
+public class GlobalEnvironment: Codable {
+    public var serverConfigurations: [String: Server] = [:]    
 }

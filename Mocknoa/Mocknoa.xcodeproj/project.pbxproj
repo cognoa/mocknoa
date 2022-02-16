@@ -13,6 +13,7 @@
 		6BA6CD8227BCD0BF0073B315 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA6CD8127BCD0BF0073B315 /* Server.swift */; };
 		6BA6CD8527BCD31D0073B315 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA6CD8427BCD31D0073B315 /* Endpoint.swift */; };
 		6BA6CD8727BCD36D0073B315 /* HttpAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA6CD8627BCD36D0073B315 /* HttpAction.swift */; };
+		6BA6CD8927BD8EB10073B315 /* GlobalStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA6CD8827BD8EB10073B315 /* GlobalStateManager.swift */; };
 		6BBF88DF27B19D3100391A06 /* MocknoaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88DE27B19D3100391A06 /* MocknoaApp.swift */; };
 		6BBF88E127B19D3100391A06 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88E027B19D3100391A06 /* ContentView.swift */; };
 		6BBF88E327B19D3400391A06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BBF88E227B19D3400391A06 /* Assets.xcassets */; };
@@ -46,6 +47,7 @@
 		6BA6CD8127BCD0BF0073B315 /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		6BA6CD8427BCD31D0073B315 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		6BA6CD8627BCD36D0073B315 /* HttpAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpAction.swift; sourceTree = "<group>"; };
+		6BA6CD8827BD8EB10073B315 /* GlobalStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalStateManager.swift; sourceTree = "<group>"; };
 		6BBF88DB27B19D3100391A06 /* Mocknoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mocknoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BBF88DE27B19D3100391A06 /* MocknoaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocknoaApp.swift; sourceTree = "<group>"; };
 		6BBF88E027B19D3100391A06 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 		6BA6CD8327BCD2AB0073B315 /* StateManagement */ = {
 			isa = PBXGroup;
 			children = (
+				6BA6CD8827BD8EB10073B315 /* GlobalStateManager.swift */,
 			);
 			path = StateManagement;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BA6CD8927BD8EB10073B315 /* GlobalStateManager.swift in Sources */,
 				6BA6CD8727BCD36D0073B315 /* HttpAction.swift in Sources */,
 				6BA6CD8227BCD0BF0073B315 /* Server.swift in Sources */,
 				6BA6CD8027BCD0330073B315 /* GlobalEnvironment.swift in Sources */,

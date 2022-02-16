@@ -10,7 +10,7 @@ import Vapor
 
 public class VaporFactory {
 
-    public static func generateServer() {
+    public static func generateServer(server: Server, completion: (Application?, Error?) -> Void) {
         DispatchQueue.global().async {
             guard var env = try? Environment.detect() else { return }
             try? LoggingSystem.bootstrap(from: &env)
