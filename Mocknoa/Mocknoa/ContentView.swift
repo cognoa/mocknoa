@@ -107,8 +107,8 @@ struct ServerRow: View {
     @Binding var currentServer: Server
     @Binding var servers: [Server]
     @Binding var selectedEndpoint: Endpoint?
-    var server: Server
     @State private var isSelected = false
+    var server: Server
 
     // TODO - REMOVE
     private func getDummyEndpoints() -> [Endpoint] {
@@ -128,7 +128,20 @@ struct ServerRow: View {
                 }
                 .cornerRadius(4)
             Spacer()
+            if presentDeleteButton {
+                Button {
+                    // Delete server
+                } label: {
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                                        .clipShape(Circle())
+                }
+            }
         } //: HSTACK
+        // Display delete button when hovering over server row
+        .onHover { isHovering in
+        }
         // Select a server
         .onTapGesture {
             if currentServer != server {
