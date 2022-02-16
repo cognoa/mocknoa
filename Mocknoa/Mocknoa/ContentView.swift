@@ -68,46 +68,6 @@ struct SidebarView: View {
     }
 }
 
-/// Lists the currently selected server's endpoints
-struct ServerConfigurationPane: View {
-    @Binding var currentServer: Server
-
-    /*
-     public struct Endpoint: Codable, Hashable {
-     public var path: String
-     public var action: HttpAction
-     public var statusCode: UInt
-     public var jsonString: String
-     }
-     */
-
-    var body: some View {
-        ForEach(currentServer.endpoints, id:\.self) { endpoint in
-            VStack {
-                HStack {
-                    Text(endpoint.path)
-                    Spacer()
-                }
-                HttpActionPicker(httpAction: endpoint.action)
-            }
-            .padding()
-        }
-        Spacer()
-    }
-}
-
-struct HttpActionPicker: View {
-    @State var httpAction: HttpAction = .get
-
-    var body: some View {
-        Picker("Http Action", selection: $httpAction) {
-            ForEach(HttpAction.allCases) { action in
-                Text(action.rawValue.capitalized)
-            }
-        }
-    }
-}
-
 struct JSONInputTextEditor: View {
     @State var text: String = "Test JSON"
     var body: some View {
@@ -115,6 +75,7 @@ struct JSONInputTextEditor: View {
         TextEditor(text: $text)
     }
 }
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
