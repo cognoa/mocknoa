@@ -12,6 +12,7 @@ struct ContentView: View {
     @State var currentServer = Server(name: "Server 331", port: 0331, endpoints: [])
     @State var selectedEndpoint: Endpoint?
 
+    // TODO - UPDATE
     @State var servers: [Server] = [
         .init(name: "Server 331", port: 0331, endpoints: []),
         .init(name: "Server 332", port: 0332, endpoints: []),
@@ -43,33 +44,14 @@ struct SidebarView: View {
     @Binding internal var selectedEndpoint: Endpoint?
     @Binding internal var servers: [Server]
 
-    private func getDummyEndpoints() -> [Endpoint] {
-        [.init(path: "somePath1", action: .get, statusCode: 555, jsonString: "JSON string"),
-         .init(path: "somePath2", action: .post, statusCode: 555, jsonString: "JSON string"),
-         .init(path: "somePath3", action: .delete, statusCode: 555, jsonString: "JSON string")]
-    }
-
     var body: some View {
         VStack {
             List {
                 ForEach(servers, id: \.self) { server in
-                    HStack {
-                        Text(server.name)
-                        // Change the background color if this is the current option
-                            .foregroundColor(currentServer == server ? Color.blue : Color.white)
-                        Spacer()
-                    }
-                    .padding(8)
-                    // Select a server
-                    .onTapGesture {
-                        if currentServer != server {
-                            currentServer = server
-                            selectedEndpoint = nil
-                        }
-                        if currentServer == servers[1] {
-                            currentServer.endpoints = getDummyEndpoints()
-                        }
-                    }
+                    ServerRow(currentServer: $currentServer,
+                              servers: $servers,
+                              selectedEndpoint: $selectedEndpoint,
+                              server: server)
                 }
                 if showNewServerRow {
                     NewServerRow(showNewServerRow: $showNewServerRow, servers: $servers)
@@ -97,6 +79,7 @@ struct SidebarView: View {
     }
 }
 
+/// Add new server button row
 struct NewServerRow: View {
     @State private var name: String = ""
     @Binding var showNewServerRow: Bool
@@ -115,6 +98,46 @@ struct NewServerRow: View {
                 showNewServerRow.toggle()
             } label: {
                 Image(systemName: "plus")
+            }
+        }
+    }
+}
+
+struct ServerRow: View {
+    @Binding var currentServer: Server
+    @Binding var servers: [Server]
+    @Binding var selectedEndpoint: Endpoint?
+    var server: Server
+    @State private var isSelected = false
+
+    // TODO - REMOVE
+    private func getDummyEndpoints() -> [Endpoint] {
+        [.init(path: "somePath1", action: .get, statusCode: 555, jsonString: "JSON string"),
+         .init(path: "somePath2", action: .post, statusCode: 555, jsonString: "JSON string"),
+         .init(path: "somePath3", action: .delete, statusCode: 555, jsonString: "JSON string")]
+    }
+
+    var body: some View {
+        HStack {
+            Text(server.name)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 1)
+            // Change the background color if this is the current option
+                .background {
+                    if currentServer == server { Color.gray }
+                }
+                .cornerRadius(4)
+            Spacer()
+        } //: HSTACK
+        // Select a server
+        .onTapGesture {
+            if currentServer != server {
+                currentServer = server
+                selectedEndpoint = nil
+                isSelected = true
+            }
+            if currentServer == servers[1] {
+                currentServer.endpoints = getDummyEndpoints()
             }
         }
     }
