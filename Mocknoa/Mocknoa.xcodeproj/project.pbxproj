@@ -22,6 +22,7 @@
 		6BBF88FB27B19D3400391A06 /* MocknoaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88FA27B19D3400391A06 /* MocknoaUITests.swift */; };
 		6BBF88FD27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88FC27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift */; };
 		F4734AA327BD84B5007EA91B /* ServerConfigurationPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4734AA227BD84B5007EA91B /* ServerConfigurationPane.swift */; };
+		F4734AA527BD8680007EA91B /* EndpointDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4734AA427BD8680007EA91B /* EndpointDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		6BBF88FA27B19D3400391A06 /* MocknoaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocknoaUITests.swift; sourceTree = "<group>"; };
 		6BBF88FC27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocknoaUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		F4734AA227BD84B5007EA91B /* ServerConfigurationPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfigurationPane.swift; sourceTree = "<group>"; };
+		F4734AA427BD8680007EA91B /* EndpointDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				F4734AA227BD84B5007EA91B /* ServerConfigurationPane.swift */,
+				F4734AA427BD8680007EA91B /* EndpointDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 			files = (
 				6BA6CD8927BD8EB10073B315 /* GlobalStateManager.swift in Sources */,
 				6BA6CD8727BCD36D0073B315 /* HttpAction.swift in Sources */,
+				F4734AA527BD8680007EA91B /* EndpointDetailView.swift in Sources */,
 				6BA6CD8227BCD0BF0073B315 /* Server.swift in Sources */,
 				6BA6CD8027BCD0330073B315 /* GlobalEnvironment.swift in Sources */,
 				F4734AA327BD84B5007EA91B /* ServerConfigurationPane.swift in Sources */,
