@@ -10,6 +10,5 @@ import Foundation
 public struct Server: Codable, Hashable {
     public var name: String
     public var port: UInt
-
-    
+    public var endpoints: [Endpoint]
 }
