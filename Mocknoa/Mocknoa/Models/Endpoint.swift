@@ -10,4 +10,6 @@ import Foundation
 public struct Endpoint: Codable {
     public var path: String
     public var action: HttpAction
+    public var statusCode: UInt
+    public var jsonString: String
 }

@@ -33,5 +33,9 @@ public class VaporFactory {
         app.get("hello") { req -> String in
             return "Hello, world"
         }
+
+        app.get("test") { req -> String in
+            return "test"
+        }
     }
 }
