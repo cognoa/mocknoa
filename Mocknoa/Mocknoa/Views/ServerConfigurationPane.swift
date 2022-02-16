@@ -10,30 +10,23 @@ import SwiftUI
 /// Lists the currently selected server's endpoints
 struct ServerConfigurationPane: View {
     @Binding var currentServer: Server
+    @Binding var selectedEndpoint: Endpoint?
 
     var body: some View {
         ForEach(currentServer.endpoints, id:\.self) { endpoint in
-            VStack {
                 HStack {
                     Text(endpoint.path)
                     Spacer()
                 }
-                HttpActionPicker(httpAction: endpoint.action)
+                .padding(.horizontal, 8)
+                .padding(.top, 8)
+            // Switch to selected endpoint
+            .onTapGesture {
+                if selectedEndpoint != endpoint {
+                    selectedEndpoint = endpoint
+                }
             }
-            .padding()
         }
         Spacer()
-    }
-}
-
-struct HttpActionPicker: View {
-    @State var httpAction: HttpAction = .get
-
-    var body: some View {
-        Picker("Http Action", selection: $httpAction) {
-            ForEach(HttpAction.allCases) { action in
-                Text(action.rawValue.capitalized)
-            }
-        }
     }
 }
