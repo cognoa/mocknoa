@@ -9,23 +9,51 @@ import SwiftUI
 
 
 struct ContentView: View {
+    @State var currentServer = Server(name: "Server 331", port: 0331)
+
+    let servers: [Server] = [
+        .init(name: "Server 331", port: 0331),
+        .init(name: "Server 332", port: 0332),
+        .init(name: "Server 333", port: 0333),
+        .init(name: "Server 334", port: 0334),
+    ]
+
     var body: some View {
         NavigationView {
-            SidebarView()
+            SidebarView(currentServer: $currentServer, servers: servers)
             ServerConfigurationPane()
             JSONInputTextEditor()
-        }        
+        }
+        // Allows the mac app window to be resizable,
+        // while it won't shrink smaller than the min size set here
+        .frame(width: 600, height: 400)
     }
 }
 
 struct SidebarView: View {
     @State private var isDefaultItemActive = true
+    @Binding var currentServer: Server
+    let servers: [Server]
 
     var body: some View {
-        List {
-            Text("Server 1")
-            // ...
-        }.listStyle(SidebarListStyle()) // Gives you this sweet sidebar look
+        VStack {
+            ForEach(servers, id: \.self) { server in
+                HStack {
+                    Text(server.name)
+                    // Change the background color if this is the current option
+                        .foregroundColor(currentServer == server ? Color.blue : Color.white)
+                    Spacer()
+                }
+                .padding(8)
+                .onTapGesture {
+                    if currentServer != server {
+                        currentServer = server
+                    }
+                }
+            }
+            .listStyle(SidebarListStyle()) // Gives you this sweet sidebar look
+            Spacer()
+        }
     }
 }
 
