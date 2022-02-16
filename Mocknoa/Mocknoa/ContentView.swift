@@ -108,6 +108,7 @@ struct ServerRow: View {
     @Binding var servers: [Server]
     @Binding var selectedEndpoint: Endpoint?
     @State private var isSelected = false
+    @State private var presentDeleteButton = false
     var server: Server
 
     // TODO - REMOVE
@@ -131,6 +132,7 @@ struct ServerRow: View {
             if presentDeleteButton {
                 Button {
                     // Delete server
+                    servers = servers.filter({ $0 != server })
                 } label: {
                     Image(systemName: "xmark")
                         .resizable()
@@ -141,6 +143,7 @@ struct ServerRow: View {
         } //: HSTACK
         // Display delete button when hovering over server row
         .onHover { isHovering in
+            presentDeleteButton = isHovering
         }
         // Select a server
         .onTapGesture {
