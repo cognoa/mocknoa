@@ -8,19 +8,23 @@
 import SwiftUI
 
 struct EndpointDetailView: View {
-//    @Binding var currentServer: Server
     @Binding var endpoint: Endpoint?
 
     var body: some View {
         if let endpoint = endpoint {
             VStack {
                 Text(endpoint.path)
+                    .padding()
                 Text("Status Code: \(endpoint.statusCode)")
+                    .padding(.bottom, 8)
+                    .padding(.horizontal, 8)
                 HttpActionPicker(httpAction: endpoint.action)
                 JSONInputTextEditor()
             }
+            .padding()
         } else {
             Text("")
+                .padding()
         }
     }
 }
