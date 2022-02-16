@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Endpoint: Codable {
+public struct Endpoint: Codable, Hashable {
     public var path: String
     public var action: HttpAction
     public var statusCode: UInt
