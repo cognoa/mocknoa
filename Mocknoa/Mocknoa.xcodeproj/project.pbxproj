@@ -1,0 +1,642 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6BA6CD7827BCC7030073B315 /* Vapor in Frameworks */ = {isa = PBXBuildFile; productRef = 6BA6CD7727BCC7030073B315 /* Vapor */; };
+		6BA6CD7D27BCC8D40073B315 /* VaporFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA6CD7C27BCC8D40073B315 /* VaporFactory.swift */; };
+		6BA6CD8027BCD0330073B315 /* GlobalEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA6CD7F27BCD0330073B315 /* GlobalEnvironment.swift */; };
+		6BA6CD8227BCD0BF0073B315 /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA6CD8127BCD0BF0073B315 /* Server.swift */; };
+		6BBF88DF27B19D3100391A06 /* MocknoaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88DE27B19D3100391A06 /* MocknoaApp.swift */; };
+		6BBF88E127B19D3100391A06 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88E027B19D3100391A06 /* ContentView.swift */; };
+		6BBF88E327B19D3400391A06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BBF88E227B19D3400391A06 /* Assets.xcassets */; };
+		6BBF88E627B19D3400391A06 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BBF88E527B19D3400391A06 /* Preview Assets.xcassets */; };
+		6BBF88F127B19D3400391A06 /* MocknoaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88F027B19D3400391A06 /* MocknoaTests.swift */; };
+		6BBF88FB27B19D3400391A06 /* MocknoaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88FA27B19D3400391A06 /* MocknoaUITests.swift */; };
+		6BBF88FD27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88FC27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6BBF88ED27B19D3400391A06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6BBF88D327B19D3100391A06 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6BBF88DA27B19D3100391A06;
+			remoteInfo = Mocknoa;
+		};
+		6BBF88F727B19D3400391A06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6BBF88D327B19D3100391A06 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6BBF88DA27B19D3100391A06;
+			remoteInfo = Mocknoa;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6BA6CD7C27BCC8D40073B315 /* VaporFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaporFactory.swift; sourceTree = "<group>"; };
+		6BA6CD7F27BCD0330073B315 /* GlobalEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalEnvironment.swift; sourceTree = "<group>"; };
+		6BA6CD8127BCD0BF0073B315 /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
+		6BBF88DB27B19D3100391A06 /* Mocknoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mocknoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BBF88DE27B19D3100391A06 /* MocknoaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocknoaApp.swift; sourceTree = "<group>"; };
+		6BBF88E027B19D3100391A06 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6BBF88E227B19D3400391A06 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6BBF88E527B19D3400391A06 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6BBF88E727B19D3400391A06 /* Mocknoa.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mocknoa.entitlements; sourceTree = "<group>"; };
+		6BBF88EC27B19D3400391A06 /* MocknoaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MocknoaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BBF88F027B19D3400391A06 /* MocknoaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocknoaTests.swift; sourceTree = "<group>"; };
+		6BBF88F627B19D3400391A06 /* MocknoaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MocknoaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BBF88FA27B19D3400391A06 /* MocknoaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocknoaUITests.swift; sourceTree = "<group>"; };
+		6BBF88FC27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocknoaUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6BBF88D827B19D3100391A06 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BA6CD7827BCC7030073B315 /* Vapor in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6BBF88E927B19D3400391A06 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6BBF88F327B19D3400391A06 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6BA6CD7B27BCC8BF0073B315 /* VaporManager */ = {
+			isa = PBXGroup;
+			children = (
+				6BA6CD7C27BCC8D40073B315 /* VaporFactory.swift */,
+			);
+			path = VaporManager;
+			sourceTree = "<group>";
+		};
+		6BA6CD7E27BCCFDB0073B315 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6BA6CD7F27BCD0330073B315 /* GlobalEnvironment.swift */,
+				6BA6CD8127BCD0BF0073B315 /* Server.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6BBF88D227B19D3100391A06 = {
+			isa = PBXGroup;
+			children = (
+				6BBF88DD27B19D3100391A06 /* Mocknoa */,
+				6BBF88EF27B19D3400391A06 /* MocknoaTests */,
+				6BBF88F927B19D3400391A06 /* MocknoaUITests */,
+				6BBF88DC27B19D3100391A06 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6BBF88DC27B19D3100391A06 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6BBF88DB27B19D3100391A06 /* Mocknoa.app */,
+				6BBF88EC27B19D3400391A06 /* MocknoaTests.xctest */,
+				6BBF88F627B19D3400391A06 /* MocknoaUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6BBF88DD27B19D3100391A06 /* Mocknoa */ = {
+			isa = PBXGroup;
+			children = (
+				6BA6CD7E27BCCFDB0073B315 /* Models */,
+				6BA6CD7B27BCC8BF0073B315 /* VaporManager */,
+				6BBF88DE27B19D3100391A06 /* MocknoaApp.swift */,
+				6BBF88E027B19D3100391A06 /* ContentView.swift */,
+				6BBF88E227B19D3400391A06 /* Assets.xcassets */,
+				6BBF88E727B19D3400391A06 /* Mocknoa.entitlements */,
+				6BBF88E427B19D3400391A06 /* Preview Content */,
+			);
+			path = Mocknoa;
+			sourceTree = "<group>";
+		};
+		6BBF88E427B19D3400391A06 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				6BBF88E527B19D3400391A06 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6BBF88EF27B19D3400391A06 /* MocknoaTests */ = {
+			isa = PBXGroup;
+			children = (
+				6BBF88F027B19D3400391A06 /* MocknoaTests.swift */,
+			);
+			path = MocknoaTests;
+			sourceTree = "<group>";
+		};
+		6BBF88F927B19D3400391A06 /* MocknoaUITests */ = {
+			isa = PBXGroup;
+			children = (
+				6BBF88FA27B19D3400391A06 /* MocknoaUITests.swift */,
+				6BBF88FC27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift */,
+			);
+			path = MocknoaUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6BBF88DA27B19D3100391A06 /* Mocknoa */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6BBF890027B19D3400391A06 /* Build configuration list for PBXNativeTarget "Mocknoa" */;
+			buildPhases = (
+				6BBF88D727B19D3100391A06 /* Sources */,
+				6BBF88D827B19D3100391A06 /* Frameworks */,
+				6BBF88D927B19D3100391A06 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Mocknoa;
+			packageProductDependencies = (
+				6BA6CD7727BCC7030073B315 /* Vapor */,
+			);
+			productName = Mocknoa;
+			productReference = 6BBF88DB27B19D3100391A06 /* Mocknoa.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6BBF88EB27B19D3400391A06 /* MocknoaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6BBF890327B19D3400391A06 /* Build configuration list for PBXNativeTarget "MocknoaTests" */;
+			buildPhases = (
+				6BBF88E827B19D3400391A06 /* Sources */,
+				6BBF88E927B19D3400391A06 /* Frameworks */,
+				6BBF88EA27B19D3400391A06 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6BBF88EE27B19D3400391A06 /* PBXTargetDependency */,
+			);
+			name = MocknoaTests;
+			productName = MocknoaTests;
+			productReference = 6BBF88EC27B19D3400391A06 /* MocknoaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6BBF88F527B19D3400391A06 /* MocknoaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6BBF890627B19D3400391A06 /* Build configuration list for PBXNativeTarget "MocknoaUITests" */;
+			buildPhases = (
+				6BBF88F227B19D3400391A06 /* Sources */,
+				6BBF88F327B19D3400391A06 /* Frameworks */,
+				6BBF88F427B19D3400391A06 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6BBF88F827B19D3400391A06 /* PBXTargetDependency */,
+			);
+			name = MocknoaUITests;
+			productName = MocknoaUITests;
+			productReference = 6BBF88F627B19D3400391A06 /* MocknoaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6BBF88D327B19D3100391A06 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1320;
+				LastUpgradeCheck = 1320;
+				TargetAttributes = {
+					6BBF88DA27B19D3100391A06 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+					6BBF88EB27B19D3400391A06 = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 6BBF88DA27B19D3100391A06;
+					};
+					6BBF88F527B19D3400391A06 = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 6BBF88DA27B19D3100391A06;
+					};
+				};
+			};
+			buildConfigurationList = 6BBF88D627B19D3100391A06 /* Build configuration list for PBXProject "Mocknoa" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6BBF88D227B19D3100391A06;
+			packageReferences = (
+				6BA6CD7627BCC7030073B315 /* XCRemoteSwiftPackageReference "vapor" */,
+			);
+			productRefGroup = 6BBF88DC27B19D3100391A06 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6BBF88DA27B19D3100391A06 /* Mocknoa */,
+				6BBF88EB27B19D3400391A06 /* MocknoaTests */,
+				6BBF88F527B19D3400391A06 /* MocknoaUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6BBF88D927B19D3100391A06 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BBF88E627B19D3400391A06 /* Preview Assets.xcassets in Resources */,
+				6BBF88E327B19D3400391A06 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6BBF88EA27B19D3400391A06 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6BBF88F427B19D3400391A06 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6BBF88D727B19D3100391A06 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BA6CD8227BCD0BF0073B315 /* Server.swift in Sources */,
+				6BA6CD8027BCD0330073B315 /* GlobalEnvironment.swift in Sources */,
+				6BA6CD7D27BCC8D40073B315 /* VaporFactory.swift in Sources */,
+				6BBF88E127B19D3100391A06 /* ContentView.swift in Sources */,
+				6BBF88DF27B19D3100391A06 /* MocknoaApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6BBF88E827B19D3400391A06 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BBF88F127B19D3400391A06 /* MocknoaTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6BBF88F227B19D3400391A06 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BBF88FB27B19D3400391A06 /* MocknoaUITests.swift in Sources */,
+				6BBF88FD27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6BBF88EE27B19D3400391A06 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6BBF88DA27B19D3100391A06 /* Mocknoa */;
+			targetProxy = 6BBF88ED27B19D3400391A06 /* PBXContainerItemProxy */;
+		};
+		6BBF88F827B19D3400391A06 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6BBF88DA27B19D3100391A06 /* Mocknoa */;
+			targetProxy = 6BBF88F727B19D3400391A06 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		6BBF88FE27B19D3400391A06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6BBF88FF27B19D3400391A06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		6BBF890127B19D3400391A06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Mocknoa/Mocknoa.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Mocknoa/Preview Content\"";
+				DEVELOPMENT_TEAM = 3Y643K2A78;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = COG.Mocknoa;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		6BBF890227B19D3400391A06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Mocknoa/Mocknoa.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Mocknoa/Preview Content\"";
+				DEVELOPMENT_TEAM = 3Y643K2A78;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = COG.Mocknoa;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		6BBF890427B19D3400391A06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Y643K2A78;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = COG.MocknoaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mocknoa.app/Contents/MacOS/Mocknoa";
+			};
+			name = Debug;
+		};
+		6BBF890527B19D3400391A06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Y643K2A78;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = COG.MocknoaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mocknoa.app/Contents/MacOS/Mocknoa";
+			};
+			name = Release;
+		};
+		6BBF890727B19D3400391A06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Y643K2A78;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = COG.MocknoaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Mocknoa;
+			};
+			name = Debug;
+		};
+		6BBF890827B19D3400391A06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Y643K2A78;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = COG.MocknoaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Mocknoa;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6BBF88D627B19D3100391A06 /* Build configuration list for PBXProject "Mocknoa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6BBF88FE27B19D3400391A06 /* Debug */,
+				6BBF88FF27B19D3400391A06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6BBF890027B19D3400391A06 /* Build configuration list for PBXNativeTarget "Mocknoa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6BBF890127B19D3400391A06 /* Debug */,
+				6BBF890227B19D3400391A06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6BBF890327B19D3400391A06 /* Build configuration list for PBXNativeTarget "MocknoaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6BBF890427B19D3400391A06 /* Debug */,
+				6BBF890527B19D3400391A06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6BBF890627B19D3400391A06 /* Build configuration list for PBXNativeTarget "MocknoaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6BBF890727B19D3400391A06 /* Debug */,
+				6BBF890827B19D3400391A06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6BA6CD7627BCC7030073B315 /* XCRemoteSwiftPackageReference "vapor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vapor/vapor";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6BA6CD7727BCC7030073B315 /* Vapor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6BA6CD7627BCC7030073B315 /* XCRemoteSwiftPackageReference "vapor" */;
+			productName = Vapor;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 6BBF88D327B19D3100391A06 /* Project object */;
+}
