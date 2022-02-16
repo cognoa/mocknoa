@@ -20,6 +20,7 @@
 		6BBF88F127B19D3400391A06 /* MocknoaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88F027B19D3400391A06 /* MocknoaTests.swift */; };
 		6BBF88FB27B19D3400391A06 /* MocknoaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88FA27B19D3400391A06 /* MocknoaUITests.swift */; };
 		6BBF88FD27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBF88FC27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift */; };
+		F4734AA327BD84B5007EA91B /* ServerConfigurationPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4734AA227BD84B5007EA91B /* ServerConfigurationPane.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		6BBF88F627B19D3400391A06 /* MocknoaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MocknoaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BBF88FA27B19D3400391A06 /* MocknoaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocknoaUITests.swift; sourceTree = "<group>"; };
 		6BBF88FC27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocknoaUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		F4734AA227BD84B5007EA91B /* ServerConfigurationPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfigurationPane.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,11 +135,12 @@
 		6BBF88DD27B19D3100391A06 /* Mocknoa */ = {
 			isa = PBXGroup;
 			children = (
-				6BA6CD8327BCD2AB0073B315 /* StateManagement */,
+				6BBF88E027B19D3100391A06 /* ContentView.swift */,
+				F4734AA127BD8480007EA91B /* Views */,
 				6BA6CD7E27BCCFDB0073B315 /* Models */,
+				6BA6CD8327BCD2AB0073B315 /* StateManagement */,
 				6BA6CD7B27BCC8BF0073B315 /* VaporManager */,
 				6BBF88DE27B19D3100391A06 /* MocknoaApp.swift */,
-				6BBF88E027B19D3100391A06 /* ContentView.swift */,
 				6BBF88E227B19D3400391A06 /* Assets.xcassets */,
 				6BBF88E727B19D3400391A06 /* Mocknoa.entitlements */,
 				6BBF88E427B19D3400391A06 /* Preview Content */,
@@ -168,6 +171,14 @@
 				6BBF88FC27B19D3400391A06 /* MocknoaUITestsLaunchTests.swift */,
 			);
 			path = MocknoaUITests;
+			sourceTree = "<group>";
+		};
+		F4734AA127BD8480007EA91B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F4734AA227BD84B5007EA91B /* ServerConfigurationPane.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -309,6 +320,7 @@
 				6BA6CD8727BCD36D0073B315 /* HttpAction.swift in Sources */,
 				6BA6CD8227BCD0BF0073B315 /* Server.swift in Sources */,
 				6BA6CD8027BCD0330073B315 /* GlobalEnvironment.swift in Sources */,
+				F4734AA327BD84B5007EA91B /* ServerConfigurationPane.swift in Sources */,
 				6BA6CD7D27BCC8D40073B315 /* VaporFactory.swift in Sources */,
 				6BBF88E127B19D3100391A06 /* ContentView.swift in Sources */,
 				6BA6CD8527BCD31D0073B315 /* Endpoint.swift in Sources */,
