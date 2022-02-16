@@ -93,9 +93,6 @@ struct SidebarView: View {
                 .padding(.horizontal, 2)
                 Spacer()
             } //: HSTACK
-            .background(content: {
-                Color.cyan
-            })
         }
     }
 }
