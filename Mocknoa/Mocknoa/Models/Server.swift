@@ -8,5 +8,8 @@
 import Foundation
 
 public struct Server: Codable {
+    public var name: String
+    public var port: UInt
+
     
 }
