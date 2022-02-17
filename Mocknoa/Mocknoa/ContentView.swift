@@ -13,19 +13,31 @@ struct ContentView: View {
     @State var currentServer: Server?
     @State var selectedEndpoint: Endpoint?
 
+    /// Should not be less than set min width and height in the `panelFrame()` modifier
+    let smallPanelMinWidth: CGFloat   = 200
+    let smallPanelIdealWidth: CGFloat = 220
+    let largePanelMultiplier: CGFloat = 150
+    var largePanelMinWidth: CGFloat { return smallPanelMinWidth + largePanelMultiplier }
+    var largePanelIdealWidth: CGFloat { return smallPanelIdealWidth + largePanelMultiplier }
+
     var body: some View {
         NavigationView {
             // List of Servers
             SidebarView(globalStateManager: globalStateManager, currentServer: $currentServer, selectedEndpoint: $selectedEndpoint)
+                .panelFrame(minWidth: smallPanelMinWidth, idealWidth: smallPanelIdealWidth)
+
             // List of currentServer's endpoints
-            ServerConfigurationPane(
-                globalStateManager: globalStateManager,
-                currentServer: $currentServer,
-                selectedEndpoint: $selectedEndpoint)
+            ServerConfigurationPane(globalStateManager: globalStateManager,
+                                    currentServer: $currentServer,
+                                    selectedEndpoint: $selectedEndpoint)
+                .panelFrame(minWidth: smallPanelMinWidth, idealWidth: smallPanelIdealWidth)
+
             // Endpoint configuration View
             EndpointDetailView(globalStateManager: globalStateManager, endpoint: $selectedEndpoint, currentServer: $currentServer)
+                .panelFrame(minWidth: largePanelMinWidth, idealWidth: largePanelIdealWidth)
+
         }
-        .frame(minWidth: 600, idealWidth: 800, maxWidth: .infinity, minHeight: 400, idealHeight: 600, maxHeight: .infinity)
+        .panelFrame()
         .onAppear {
             currentServer = globalStateManager.globalEnvironment.sortedServers.first
         }
