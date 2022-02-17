@@ -8,7 +8,7 @@
 import Foundation
 
 public class MocknoaFileManager {
-    public static let globalEnvironmentFileName = "GlobalEnvironment.mocknoa"
+    public static let globalEnvironmentFileName = "GlobalEnvironment"
 
     public static func createMocknoaDocumentsDirectory() -> URL? {
         guard let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else {
@@ -41,7 +41,7 @@ public class MocknoaFileManager {
         do {
             let data = try encoder.encode(globalEnvironment)
             if FileManager.default.fileExists(atPath: fileURL.absoluteString) {
-                try FileManager.default.removeItem(at: fileURL)
+                try FileManager.default.removeItem(atPath: fileURL.path)
             }
             FileManager.default.createFile(atPath: fileURL.path, contents: data, attributes: nil)
         } catch {

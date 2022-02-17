@@ -7,6 +7,7 @@
 
 import Foundation
 import Vapor
+import SwiftUI
 
 public class VaporFactory {
     public static func generateServer(server: Server, completion: @escaping (Application?, DispatchQueue, Error?) -> Void) {
@@ -44,4 +45,49 @@ public class VaporFactory {
             return "test"
         }
     }
+
+    private func generateRoutes(app: Application, server: Server) {
+        let getEndpoints = server.endpoints.getEndpoints
+        let postEndpoints = server.endpoints.postEndpoints
+        let patchEndpoints = server.endpoints.patchEndpoints
+        let deleteEndpoints = server.endpoints.deleteEndpoints
+
+        generateGetRoutes(app: app, server: server, endPoints: getEndpoints)
+        generatePostRoutes(app: app, server: server, endPoints: postEndpoints)
+        generatePatchRoutes(app: app, server: server, endPoints: patchEndpoints)
+        generateDeleteRoutes(app: app, server: server, endPoints: deleteEndpoints)
+    }
+
+    private func generateGetRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+        endPoints.forEach { endpoint in
+            app.get("\(endpoint.path)") { _ in
+                return endpoint.jsonString
+            }
+        }
+    }
+
+    private func generatePostRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+        endPoints.forEach { endpoint in
+            app.post("\(endpoint.path)") { _ in
+                return endpoint.jsonString
+            }
+        }
+    }
+
+    private func generatePatchRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+        endPoints.forEach { endpoint in
+            app.patch("\(endpoint.path)") { _ in
+                return endpoint.jsonString
+            }
+        }
+    }
+
+    private func generateDeleteRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+        endPoints.forEach { endpoint in
+            app.delete("\(endpoint.path)") { _ in
+                return endpoint.jsonString
+            }
+        }
+    }
+
 }

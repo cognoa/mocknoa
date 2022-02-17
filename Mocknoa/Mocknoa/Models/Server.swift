@@ -14,6 +14,10 @@ public struct Server: Codable, Hashable {
     public var port: UInt
     public var endpointsDictionary: [String: Endpoint] = defaultEndpoints
 
+    public var endpoints: [Endpoint] {
+        return Array(endpointsDictionary.values)
+    }
+
     public var sortedEndpoints: [Endpoint] {
         return Array(endpointsDictionary.values).sortedEndpointsByCreation
     }
