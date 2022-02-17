@@ -9,5 +9,9 @@ import Foundation
 import Vapor
 
 public class GlobalEnvironment: Codable {
-    public var serverConfigurations: [String: Server] = [:]    
+    public var servers: [String: Server] = [:]
+
+    public var sortedServers: [Server] {
+        return Array(servers.values).sortedByCreationDate
+    }
 }

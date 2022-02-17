@@ -8,22 +8,27 @@
 import SwiftUI
 
 struct EndpointDetailView: View {
+    @StateObject internal var globalStateManager: GlobalStateManager
     @Binding internal var endpoint: Endpoint?
+    @Binding internal var currentServer: Server?
     @State private var path: String = ""
     @State private var statusCode: String = ""
 
     var body: some View {
-        if let endpoint = endpoint {
+        if let endpoint = endpoint, let currentServer = currentServer {
             VStack {
                 HStack {
                     Text("Path: ")
                         .padding(.horizontal, 2)
+
                     TextField("New path", text: $path)
                         .background(Color.gray)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .cornerRadius(3)
                         .onSubmit {
+                            print("Endpoint Path Textfield Submitted")
                             self.endpoint?.path = path
+                            updateEndpoint()
                         }
                 }
                 HStack {
@@ -36,6 +41,7 @@ struct EndpointDetailView: View {
                         .onSubmit {
                             if let statusCode = UInt(statusCode) {
                                 self.endpoint?.statusCode = statusCode
+                                updateEndpoint()
                             }
                         }
                 }
@@ -48,6 +54,13 @@ struct EndpointDetailView: View {
                 .padding()
         }
     }
+
+    private func updateEndpoint() {
+        guard let endpoint = endpoint, let currentServer = currentServer else {
+            return
+        }
+        globalStateManager.updateEndpointOnServer(server: currentServer, endpoint: endpoint)
+    }
 }
 
 struct HttpActionPicker: View {
@@ -58,7 +71,9 @@ struct HttpActionPicker: View {
             ForEach(HttpAction.allCases) { action in
                 Text(action.rawValue.capitalized)
             }
-        }
+        }.onChange(of: httpAction, perform: { action in
+            print("Picker submitted \(httpAction.rawValue)")
+        })
     }
 }
 

@@ -9,7 +9,7 @@ import Foundation
 import Vapor
 import Combine
 
-public class GlobalStateManager {
+public class GlobalStateManager: ObservableObject {
     @Published public var globalEnvironment: GlobalEnvironment
 
     public var activeVaporServers: [String: Application] = [:]
@@ -20,13 +20,45 @@ public class GlobalStateManager {
     }
 
     public func addServerConfiguration(server: Server) {
-        globalEnvironment.serverConfigurations[server.id] = server
+        globalEnvironment.servers[server.id] = server
+    }
+
+    public func createAndAddNewServerConfiguration(name: String) {
+        let newServer = Server(name: name, port: 8080)
+        globalEnvironment.servers[newServer.id] = newServer
     }
 
     public func deleteServerConfiguration(server: Server) {
-        globalEnvironment.serverConfigurations[server.id] = nil
+        globalEnvironment.servers[server.id] = nil
     }
 
+    public func getServerById(id: String) -> Server? {
+        if let server = globalEnvironment.servers[id] {
+            return server
+        } else {
+            return nil
+        }
+    }
+}
+
+//MARK: Endpoint Management
+extension GlobalStateManager {
+    public func updateEndpointOnServer(server: Server, endpoint: Endpoint) {
+        globalEnvironment.servers[server.id]?.endpointsDictionary[endpoint.id] = endpoint
+    }
+
+    public func createEndpointOnServerWithDefaultSettings(server: Server, path: String) -> Endpoint? {
+        let endpoint = Endpoint(path: path, action: .get, statusCode: 200, jsonString: "")
+        guard globalEnvironment.servers[server.id] != nil else {
+            return nil
+        }
+        globalEnvironment.servers[server.id]?.endpointsDictionary[endpoint.id] = endpoint
+        return endpoint
+    }
+}
+
+// MARK: Vapor Server Management
+extension GlobalStateManager {
     public func startServer(server: Server) {
         guard activeVaporServers[server.id] == nil else  {
             // Server is already running
@@ -41,7 +73,6 @@ public class GlobalStateManager {
                 self.serverDispatchQueues[server.id] = queue
             }
         }
-
         MocknoaFileManager.saveGlobalEnvironment(globalEnvironment)
     }
 
@@ -52,15 +83,12 @@ public class GlobalStateManager {
         }
         activeServer.shutdown()
     }
-
-    private func saveGlobalEnvironment() {
-
-    }
 }
+
 
 extension GlobalStateManager {
     public enum Error {
         case serverAlreadyRunningError
-        
+
     }
 }
