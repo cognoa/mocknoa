@@ -106,32 +106,31 @@ struct ServerRow: View {
     }
 
     var body: some View {
-        HStack {
-            Text(server.name)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 1)
-            // Change the background color if this is the current option
-                .background {
-                    if currentServer == server { Color.gray }
+        VStack {
+            HStack {
+                Text(server.name)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 1)
+                Spacer()
+                if presentDeleteButton {
+                    Button {
+                        // Delete server
+                        servers = servers.filter({ $0 != server })
+                    } label: {
+                        Image(systemName: "xmark")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .clipShape(Circle())
+                    }
                 }
-                .cornerRadius(4)
-            Spacer()
-            if presentDeleteButton {
-                Button {
-                    // Delete server
-                    servers = servers.filter({ $0 != server })
-                } label: {
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                                        .clipShape(Circle())
-                }
+            } //: HSTACK
+            // Display delete button when hovering over server row
+            .onHover { isHovering in
+                presentDeleteButton = isHovering
             }
-        } //: HSTACK
-        // Display delete button when hovering over server row
-        .onHover { isHovering in
-            presentDeleteButton = isHovering
-        }
+            PlayToolBar()
+            Divider()
+        } //: VSTACK
         // Select a server
         .onTapGesture {
             if currentServer != server {
@@ -143,6 +142,35 @@ struct ServerRow: View {
                 currentServer.endpoints = getDummyEndpoints()
             }
         }
+
+    // Change the background color if this is the current option
+        .background {
+            if currentServer == server { Color.gray }
+        }
+        .cornerRadius(4)
+        .padding(.all, 2)
+    }
+}
+
+struct PlayToolBar: View {
+    var body: some View {
+        HStack {
+            Button {
+                print("Start Server")
+            } label: {
+                Image(systemName: "play.fill")
+            } // Start Button
+            .clipShape(Circle())
+            .aspectRatio(contentMode: .fit)
+
+            Button {
+                print("Stop Server")
+            } label: {
+                Image(systemName: "stop.fill")
+            } // Stop Button
+            .clipShape(Circle())
+            .aspectRatio(contentMode: .fit)
+        } //: HSTACK
     }
 }
 
