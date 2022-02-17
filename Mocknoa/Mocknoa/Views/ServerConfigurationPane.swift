@@ -30,8 +30,9 @@ struct ServerConfigurationPane: View {
                     }
                 } //: LIST
                 BottomToolBar(showNewRow: $showNewRow)
-            } //: VSTACK
+            }
         }
+
     }
 }
 
@@ -73,7 +74,7 @@ struct EndpointRow: View {
 
     var body: some View {
         HStack {
-            Text(endpoint.path)
+            Text(endpoint.path.isEmpty ? "root" : endpoint.path)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 1)
             // Change the background color if this is the current option
@@ -85,13 +86,7 @@ struct EndpointRow: View {
         }
         // Switch to selected endpoint
         .onTapGesture {
-//            if selectedEndpoint != endpoint {
-
             selectedEndpoint = endpoint
-//            }
-        }
-        .onAppear {
-            print("Server Endpoint Row: \(endpoint.path)")
         }
     }
 }

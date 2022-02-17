@@ -60,7 +60,7 @@ public class VaporFactory {
 
     private func generateGetRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            app.get("\(endpoint.path)") { _ in
+            app.get("\(endpoint.trimmedPath())") { _ in
                 return endpoint.jsonString
             }
         }
@@ -68,7 +68,7 @@ public class VaporFactory {
 
     private func generatePostRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            app.post("\(endpoint.path)") { _ in
+            app.post("\(endpoint.trimmedPath())") { _ in
                 return endpoint.jsonString
             }
         }
@@ -76,7 +76,7 @@ public class VaporFactory {
 
     private func generatePatchRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            app.patch("\(endpoint.path)") { _ in
+            app.patch("\(endpoint.trimmedPath())") { _ in
                 return endpoint.jsonString
             }
         }
@@ -84,7 +84,7 @@ public class VaporFactory {
 
     private func generateDeleteRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            app.delete("\(endpoint.path)") { _ in
+            app.delete("\(endpoint.trimmedPath())") { _ in
                 return endpoint.jsonString
             }
         }

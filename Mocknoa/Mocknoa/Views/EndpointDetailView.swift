@@ -54,6 +54,14 @@ struct EndpointDetailView: View {
             }
             .padding()
             .onAppear {
+                print("Endpoint detail did appear")
+                if let globalEndpoint = globalStateManager.getEndpointBy(id: endpoint.id, server: currentServer) {
+                    path = globalEndpoint.path
+                    statusCode = String(globalEndpoint.statusCode)
+                    httpAction = globalEndpoint.action
+                    jsonText = globalEndpoint.jsonString
+                }
+            }.onChange(of: endpoint) { endpoint in
                 if let globalEndpoint = globalStateManager.getEndpointBy(id: endpoint.id, server: currentServer) {
                     path = globalEndpoint.path
                     statusCode = String(globalEndpoint.statusCode)

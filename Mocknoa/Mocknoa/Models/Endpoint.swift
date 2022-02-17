@@ -18,6 +18,17 @@ public struct Endpoint: Codable, Hashable {
     public func defaultEndpoint() -> Endpoint {
         return Endpoint(path: "", action: .get, statusCode: 200, jsonString: "")
     }
+
+    public func trimmedPath() -> String {
+        guard let firstCharacter = path.first else { return path }
+        var localPath = String(path)
+        if firstCharacter == "/" {
+           localPath.removeFirst()
+            return localPath
+        } else {
+            return path
+        }
+    }
 }
 
 extension Array where Element == Endpoint {
