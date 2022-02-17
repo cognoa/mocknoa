@@ -9,14 +9,29 @@ import Foundation
 import Vapor
 import Combine
 
+public class GlobalSelectionStatus: Codable {
+    public var currentServer: Server?
+    public var selectedEndpoint: Endpoint?
+}
+
 public class GlobalStateManager: ObservableObject {
     @Published public var globalEnvironment: GlobalEnvironment
+    @Published public var globalSelectionStatus: GlobalSelectionStatus
+
+    public func setCurrentServer(server: Server) {
+        globalSelectionStatus.currentServer = server
+    }
+
+    public func setSelectedEndpoint(endpoint: Endpoint) {
+        globalSelectionStatus.selectedEndpoint = endpoint
+    }
 
     public var activeVaporServers: [String: Application] = [:]
     private var serverDispatchQueues: [String: DispatchQueue] = [:]
 
     public init() {
         self.globalEnvironment = GlobalEnvironment()
+        self.globalSelectionStatus = GlobalSelectionStatus()
     }
 
     public func addServerConfiguration(server: Server) {
