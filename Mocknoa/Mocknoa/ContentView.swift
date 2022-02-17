@@ -13,19 +13,31 @@ struct ContentView: View {
     @State var currentServer: Server?
     @State var selectedEndpoint: Endpoint?
 
+    /// Should not be less than set min width and height in the `panelFrame()` modifier
+    let smallPanelMinWidth: CGFloat   = 200
+    let smallPanelIdealWidth: CGFloat = 220
+    let largePanelMultiplier: CGFloat = 150
+    var largePanelMinWidth: CGFloat { return smallPanelMinWidth + largePanelMultiplier }
+    var largePanelIdealWidth: CGFloat { return smallPanelIdealWidth + largePanelMultiplier }
+
     var body: some View {
         NavigationView {
             // List of Servers
             SidebarView(globalStateManager: globalStateManager, currentServer: $currentServer, selectedEndpoint: $selectedEndpoint)
+                .panelFrame(minWidth: smallPanelMinWidth, idealWidth: smallPanelIdealWidth)
+
             // List of currentServer's endpoints
-            ServerConfigurationPane(
-                globalStateManager: globalStateManager,
-                currentServer: $currentServer,
-                selectedEndpoint: $selectedEndpoint)
+            ServerConfigurationPane(globalStateManager: globalStateManager,
+                                    currentServer: $currentServer,
+                                    selectedEndpoint: $selectedEndpoint)
+                .panelFrame(minWidth: smallPanelMinWidth, idealWidth: smallPanelIdealWidth)
+
             // Endpoint configuration View
             EndpointDetailView(globalStateManager: globalStateManager, endpoint: $selectedEndpoint, currentServer: $currentServer)
+                .panelFrame(minWidth: largePanelMinWidth, idealWidth: largePanelIdealWidth)
+
         }
-        .frame(minWidth: 600, idealWidth: 800, maxWidth: .infinity, minHeight: 400, idealHeight: 600, maxHeight: .infinity)
+        .panelFrame()
         .onAppear {
             currentServer = globalStateManager.globalEnvironment.sortedServers.first
         }
@@ -69,7 +81,6 @@ struct NewServerRow: View {
     @StateObject internal var globalStateManager: GlobalStateManager
     @State private var name: String = ""
     @Binding var showNewServerRow: Bool
-//    @Binding var servers: [Server]
 
 
     var body: some View {
@@ -95,15 +106,7 @@ struct ServerRow: View {
     @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
     @State private var isSelected = false
-    @State private var presentDeleteButton = false
     var server: Server
-
-    // TODO - REMOVE
-//    private func getDummyEndpoints() -> [Endpoint] {
-//        [.init(path: "somePath1", action: .get, statusCode: 555, jsonString: "JSON string"),
-//         .init(path: "somePath2", action: .post, statusCode: 555, jsonString: "JSON string"),
-//         .init(path: "somePath3", action: .delete, statusCode: 555, jsonString: "JSON string")]
-//    }
 
     var body: some View {
         VStack {
@@ -112,26 +115,14 @@ struct ServerRow: View {
                     .padding(.horizontal, 8)
                     .padding(.vertical, 1)
                 Spacer()
-                if presentDeleteButton {
-                    Button {
-                        // Delete server
-                        globalStateManager.deleteServerConfiguration(server: server)
-                    } label: {
-                        Image(systemName: "xmark")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .clipShape(Circle())
-                    }
-                }
             } //: HSTACK
-            // Display delete button when hovering over server row
-            .onHover { isHovering in
-                presentDeleteButton = isHovering
-            }
-            PlayToolBar()
+            ServerToolBar(globalStateManager: globalStateManager, server: server)
+                .padding(.all, 4)
             Divider()
         } //: VSTACK
-        // Select a server
+        // Needed to make the entire VStack tappable for `onTapGesture` to work
+        .contentShape(Rectangle())
+        // Select Server
         .onTapGesture {
             if currentServer != server {
                 currentServer = server
@@ -139,23 +130,28 @@ struct ServerRow: View {
                 isSelected = true
             }
         }
-
-    // Change the background color if this is the current option
+        // Change the background color if this is the current option
         .background {
             if currentServer == server { Color.gray }
         }
         .cornerRadius(4)
-        .padding(.all, 2)
     }
 }
 
-struct PlayToolBar: View {
+struct ServerToolBar: View {
+    @ObservedObject internal var globalStateManager: GlobalStateManager
+    var server: Server
+    let minSize: CGFloat = 7
+
     var body: some View {
         HStack {
             Button {
                 print("Start Server")
             } label: {
                 Image(systemName: "play.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(minWidth: minSize, minHeight: minSize)
             } // Start Button
             .clipShape(Circle())
             .aspectRatio(contentMode: .fit)
@@ -164,7 +160,26 @@ struct PlayToolBar: View {
                 print("Stop Server")
             } label: {
                 Image(systemName: "stop.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(minWidth: minSize, minHeight: minSize)
             } // Stop Button
+            .clipShape(Circle())
+            .aspectRatio(contentMode: .fit)
+
+            Spacer()
+
+            Button {
+                // Delete server
+                globalStateManager.deleteServerConfiguration(server: server)
+            } label: {
+                Image(systemName: "xmark")
+                    .resizable()
+                    .font(Font.title.weight(.bold))
+                    .aspectRatio(contentMode: .fit)
+                    .frame(minWidth: minSize, minHeight: minSize)
+                    .foregroundColor(.red)
+            } // Delete Button
             .clipShape(Circle())
             .aspectRatio(contentMode: .fit)
         } //: HSTACK
