@@ -13,13 +13,18 @@ public class GlobalStateManager {
     @Published public var globalEnvironment: GlobalEnvironment
 
     public var activeVaporServers: [String: Application] = [:]
+    private var serverDispatchQueues: [String: DispatchQueue] = [:]
 
     public init() {
         self.globalEnvironment = GlobalEnvironment()
     }
 
-    public func addServer(server: Server) {
-//        globalEnvironment.servers
+    public func addServerConfiguration(server: Server) {
+        globalEnvironment.serverConfigurations[server.id] = server
+    }
+
+    public func deleteServerConfiguration(server: Server) {
+        globalEnvironment.serverConfigurations[server.id] = nil
     }
 
     public func startServer(server: Server) {
@@ -28,6 +33,16 @@ public class GlobalStateManager {
             return
         }
 
+        VaporFactory.generateServer(server: server) { app, queue, error in
+            if let error = error {
+                print("Error generating server \(error)")
+            } else if let app = app {
+                self.activeVaporServers[server.id] = app
+                self.serverDispatchQueues[server.id] = queue
+            }
+        }
+
+        MocknoaFileManager.saveGlobalEnvironment(globalEnvironment)
     }
 
     public func stopServer(server: Server) {
@@ -36,5 +51,9 @@ public class GlobalStateManager {
             return
         }
         activeServer.shutdown()
+    }
+
+    private func saveGlobalEnvironment() {
+
     }
 }
