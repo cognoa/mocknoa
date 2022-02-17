@@ -17,18 +17,7 @@ struct ServerConfigurationPane: View {
         VStack {
             List {
                 ForEach(currentServer.endpoints, id:\.self) { endpoint in
-                    HStack {
-                        Text(endpoint.path)
-                        Spacer()
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.top, 8)
-                    // Switch to selected endpoint
-                    .onTapGesture {
-                        if selectedEndpoint != endpoint {
-                            selectedEndpoint = endpoint
-                        }
-                    }
+                    EndpointRow(selectedEndpoint: $selectedEndpoint, endpoint: endpoint)
                 }
                 if showNewRow {
                     NewEndpointRow(showNewRow: $showNewRow, currentServer: $currentServer, selectedEndpoint: $selectedEndpoint)
@@ -39,7 +28,7 @@ struct ServerConfigurationPane: View {
     }
 }
 
-/// Add new server button row
+/// Add new Endpoint button row
 struct NewEndpointRow: View {
     @State private var path: String = ""
     @Binding var showNewRow: Bool
@@ -61,6 +50,31 @@ struct NewEndpointRow: View {
                 showNewRow.toggle()
             } label: {
                 Image(systemName: "plus")
+            }
+        }
+    }
+}
+
+struct EndpointRow: View {
+    @Binding internal var selectedEndpoint: Endpoint?
+    internal let endpoint: Endpoint
+
+    var body: some View {
+        HStack {
+            Text(endpoint.path)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 1)
+            // Change the background color if this is the current option
+                .background {
+                    if selectedEndpoint == endpoint { Color.gray }
+                }
+                .cornerRadius(4)
+            Spacer()
+        }
+        // Switch to selected endpoint
+        .onTapGesture {
+            if selectedEndpoint != endpoint {
+                selectedEndpoint = endpoint
             }
         }
     }
