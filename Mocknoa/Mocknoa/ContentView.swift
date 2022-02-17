@@ -110,13 +110,6 @@ struct ServerRow: View {
     @State private var presentDeleteButton = false
     var server: Server
 
-    // TODO - REMOVE
-//    private func getDummyEndpoints() -> [Endpoint] {
-//        [.init(path: "somePath1", action: .get, statusCode: 555, jsonString: "JSON string"),
-//         .init(path: "somePath2", action: .post, statusCode: 555, jsonString: "JSON string"),
-//         .init(path: "somePath3", action: .delete, statusCode: 555, jsonString: "JSON string")]
-//    }
-
     var body: some View {
         VStack {
             HStack {
@@ -133,6 +126,7 @@ struct ServerRow: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .clipShape(Circle())
+                            .foregroundColor(.red)
                     }
                 }
             } //: HSTACK
