@@ -11,9 +11,10 @@ struct EndpointDetailView: View {
     @StateObject internal var globalStateManager: GlobalStateManager
     @Binding internal var endpoint: Endpoint?
     @Binding internal var currentServer: Server?
+    @State var httpAction: HttpAction?
     @State private var path: String = ""
     @State private var statusCode: String = ""
-
+    @State private var jsonText: String = ""
     var body: some View {
         if let endpoint = endpoint, let currentServer = currentServer {
             VStack {
@@ -45,10 +46,18 @@ struct EndpointDetailView: View {
                             }
                         }
                 }
-                HttpActionPicker(httpAction: endpoint.action)
-                JSONInputTextEditor()
+                HttpActionPicker(globalStateManager: globalStateManager, server: currentServer, endpoint: $endpoint, httpAction: $httpAction)
+                JSONInputTextEditor(globalStateManager: globalStateManager, server: currentServer, endpoint: $endpoint, jsonText: $jsonText)
             }
             .padding()
+            .onAppear {
+                if let globalEndpoint = globalStateManager.getEndpointBy(id: endpoint.id, server: currentServer) {
+                    path = globalEndpoint.path
+                    statusCode = String(globalEndpoint.statusCode)
+                    httpAction = globalEndpoint.action
+                    jsonText = globalEndpoint.jsonString
+                }
+            }
         } else {
             Text("")
                 .padding()
@@ -64,26 +73,50 @@ struct EndpointDetailView: View {
 }
 
 struct HttpActionPicker: View {
-    @State var httpAction: HttpAction = .get
+    @StateObject internal var globalStateManager: GlobalStateManager
+    internal var server: Server
+    @Binding internal var endpoint: Endpoint?
+    @Binding internal var httpAction: HttpAction?
+    @State private var localHttpAction: HttpAction = .get
 
     var body: some View {
-        Picker("Http Action", selection: $httpAction) {
+        Picker("Http Action", selection: $localHttpAction) {
             ForEach(HttpAction.allCases) { action in
                 Text(action.rawValue.capitalized)
             }
-        }.onChange(of: httpAction, perform: { action in
-            print("Picker submitted \(httpAction.rawValue)")
+        }.onChange(of: localHttpAction, perform: { action in
+            if var localEndpoint = endpoint {
+                localHttpAction = action
+                httpAction = action
+                endpoint?.action = action
+                localEndpoint.action = action
+                globalStateManager.updateEndpointOnServer(server: server, endpoint: localEndpoint)
+            }
         })
+        .onAppear {
+            if let httpAction = httpAction {
+                localHttpAction = httpAction
+            }
+        }
     }
 }
 
 struct JSONInputTextEditor: View {
-    @State var text: String = "Test JSON"
+    @StateObject internal var globalStateManager: GlobalStateManager
+    internal var server: Server
+    @Binding internal var endpoint: Endpoint?
+    @Binding internal var jsonText: String
 
     var body: some View {
         VStack {
             Text("Input JSON Below")
-            TextEditor(text: $text)
+            TextEditor(text: $jsonText)
+        }.onChange(of: jsonText) { jsonText in
+            if var localEndpoint = endpoint {
+                localEndpoint.jsonString = jsonText
+                endpoint?.jsonString = jsonText
+                globalStateManager.updateEndpointOnServer(server: server, endpoint: localEndpoint)
+            }
         }
     }
 }

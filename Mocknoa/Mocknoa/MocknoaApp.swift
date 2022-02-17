@@ -13,9 +13,7 @@ struct MocknoaApp: App {
     var globalStateManager = GlobalStateManager()
 
     init() {
-//        let serverConfig = Server(name: "Test Server 1", port: 9000, endpoints: [])
-//        self.globalStateManager.addServerConfiguration(server: serverConfig)
-//        self.globalStateManager.startServer(server: serverConfig)
+        globalStateManager.appIsIniting()
     }
     
     var body: some Scene {

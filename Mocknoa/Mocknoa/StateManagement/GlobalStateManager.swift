@@ -36,15 +36,18 @@ public class GlobalStateManager: ObservableObject {
 
     public func addServerConfiguration(server: Server) {
         globalEnvironment.servers[server.id] = server
+        saveGlobalEnvironment()
     }
 
     public func createAndAddNewServerConfiguration(name: String) {
         let newServer = Server(name: name, port: 8080)
         globalEnvironment.servers[newServer.id] = newServer
+        saveGlobalEnvironment()
     }
 
     public func deleteServerConfiguration(server: Server) {
         globalEnvironment.servers[server.id] = nil
+        saveGlobalEnvironment()
     }
 
     public func getServerById(id: String) -> Server? {
@@ -60,7 +63,19 @@ public class GlobalStateManager: ObservableObject {
 extension GlobalStateManager {
     public func updateEndpointOnServer(server: Server, endpoint: Endpoint) {
         globalEnvironment.servers[server.id]?.endpointsDictionary[endpoint.id] = endpoint
+        saveGlobalEnvironment()
     }
+
+//    public func updateEndpointBy(id: String, newEndpoint: Endpoint) {
+//        for (_, var server) in globalEnvironment.servers {
+//            for (endpointId, endpoint) in server.endpointsDictionary {
+//                if endpointId == endpoint.id {
+//                    server.endpointsDictionary[id] = newEndpoint
+//                }
+//            }
+//        }
+//        saveGlobalEnvironment()
+//    }
 
     public func createEndpointOnServerWithDefaultSettings(server: Server, path: String) -> Endpoint? {
         let endpoint = Endpoint(path: path, action: .get, statusCode: 200, jsonString: "")
@@ -68,7 +83,26 @@ extension GlobalStateManager {
             return nil
         }
         globalEnvironment.servers[server.id]?.endpointsDictionary[endpoint.id] = endpoint
+        saveGlobalEnvironment()
         return endpoint
+    }
+
+    public func getEndpointBy(id: String, server: Server) -> Endpoint? {
+        guard let server = getServerById(id: server.id) else { return nil }
+        return server.endpointsDictionary[id]
+    }
+}
+
+// MARK: Persistence and LifeCycle
+extension GlobalStateManager {
+    public func appIsIniting() {
+        if let globalEnvironment = MocknoaFileManager.retrieveGlobalEnvironment() {
+            self.globalEnvironment = globalEnvironment
+        }
+    }
+
+    internal func saveGlobalEnvironment() {
+        MocknoaFileManager.saveGlobalEnvironment(globalEnvironment)
     }
 }
 

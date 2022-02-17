@@ -138,10 +138,6 @@ struct ServerRow: View {
                 selectedEndpoint = nil
                 isSelected = true
             }
-//            if var currentServer = currentServer,
-//               let currentServerEndpoints = globalStateManager.globalEnvironment.servers[currentServer.id]?.endpoints {
-//                currentServer.endpoints = currentServerEndpoints
-//            }
         }
 
     // Change the background color if this is the current option
