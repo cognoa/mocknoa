@@ -57,3 +57,10 @@ public class GlobalStateManager {
 
     }
 }
+
+extension GlobalStateManager {
+    public enum Error {
+        case serverAlreadyRunningError
+        
+    }
+}
