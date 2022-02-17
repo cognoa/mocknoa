@@ -11,20 +11,20 @@ struct BottomToolBar: View {
     @Binding var showNewRow: Bool
 
     var body: some View {
-        HStack(alignment: .center) {
-            Button {
-                showNewRow.toggle()
-            } label: {
+        Button {
+            showNewRow.toggle()
+        } label: {
+            HStack {
+                Spacer()
                 Image(systemName: "plus")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .foregroundColor(Color.white)
-                    .padding(.all, 2)
+                Spacer()
             }
-            .aspectRatio(contentMode: .fit)
-            .padding(.vertical, 1)
-            .padding(.horizontal, 2)
-            Spacer()
+            .padding(.all, 2)
         }
+        .padding(.all, 4)
+        .padding(.horizontal, 2)
     }
 }
