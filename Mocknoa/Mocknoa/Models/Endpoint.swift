@@ -26,4 +26,9 @@ extension Array where Element == Endpoint {
             return $0.creationDate < $1.creationDate
         }
     }
+
+    public var getEndpoints: [Endpoint] { return self.filter({ $0.action == .get }) }
+    public var postEndpoints: [Endpoint] { return self.filter({ $0.action == .post }) }
+    public var patchEndpoints: [Endpoint] { return self.filter({ $0.action == .patch }) }
+    public var deleteEndpoints: [Endpoint] { return self.filter({ $0.action == .delete }) }
 }

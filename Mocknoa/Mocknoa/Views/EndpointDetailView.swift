@@ -46,7 +46,10 @@ struct EndpointDetailView: View {
                             }
                         }
                 }
-                HttpActionPicker(globalStateManager: globalStateManager, server: currentServer, endpoint: $endpoint, httpAction: $httpAction)
+
+                if let httpAction = httpAction {
+                    HttpActionPicker(globalStateManager: globalStateManager, server: currentServer, endpoint: $endpoint, httpAction: $httpAction, localHttpAction: httpAction)
+                }
                 JSONInputTextEditor(globalStateManager: globalStateManager, server: currentServer, endpoint: $endpoint, jsonText: $jsonText)
             }
             .padding()
@@ -77,7 +80,7 @@ struct HttpActionPicker: View {
     internal var server: Server
     @Binding internal var endpoint: Endpoint?
     @Binding internal var httpAction: HttpAction?
-    @State private var localHttpAction: HttpAction = .get
+    @State internal var localHttpAction: HttpAction
 
     var body: some View {
         Picker("Http Action", selection: $localHttpAction) {
