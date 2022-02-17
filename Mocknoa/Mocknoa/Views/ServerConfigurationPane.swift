@@ -52,7 +52,7 @@ struct NewEndpointRow: View {
                     .cornerRadius(3)
                 Spacer()
                 Button {
-                    // Create new endpoint                    
+                    // Create new endpoint
                     guard let endpoint = globalStateManager.createEndpointOnServerWithDefaultSettings(server: currentServer, path: path) else {
                         showNewRow.toggle()
                         return
@@ -76,19 +76,19 @@ struct EndpointRow: View {
             Text(endpoint.path)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 1)
-            // Change the background color if this is the current option
-                .background {
-                    if selectedEndpoint == endpoint { Color.gray }
-                }
                 .cornerRadius(4)
             Spacer()
         }
+        // Change the background color if this is the current option
+        .background {
+            if selectedEndpoint == endpoint { Color.gray }
+        }
+        .cornerRadius(4)
+        // Needed to make the entire VStack tappable for `onTapGesture` to work
+        .contentShape(Rectangle())
         // Switch to selected endpoint
         .onTapGesture {
-//            if selectedEndpoint != endpoint {
-
             selectedEndpoint = endpoint
-//            }
         }
         .onAppear {
             print("Server Endpoint Row: \(endpoint.path)")

@@ -105,17 +105,57 @@ struct ServerRow: View {
     @StateObject internal var globalStateManager: GlobalStateManager
     @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
-    @State private var isSelected = false
     var server: Server
+    @State private var portText = ""
+
+    private var port: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .none
+        let number = NSNumber(value: server.port)
+        if let formattedValue = formatter.string(from: number) {
+            return formattedValue
+        } else {
+            return "0000"
+        }
+    }
 
     var body: some View {
         VStack {
-            HStack {
-                Text(server.name)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 1)
-                Spacer()
-            } //: HSTACK
+            VStack {
+                HStack {
+                    Text(server.name)
+                        .font(.headline)
+                        .padding(.vertical, 1)
+                    Spacer()
+                } //: HSTACK
+
+                if currentServer != server {
+                    HStack {
+                        Text("Port: ")
+                            .font(.footnote)
+                        TextField("Add port number", text: $portText)
+                            .multilineTextAlignment(.trailing)
+                            .font(.footnote)
+                            .cornerRadius(4)
+                            .padding(.horizontal, 2)
+                            .onSubmit {
+                                if let portNumber = UInt(portText) {
+                                    globalStateManager.setPort(for: currentServer,
+                                                                  with: portNumber)
+                                }
+                            }
+                    } //: HSTACK
+                } else {
+                    HStack {
+                        Text("Port: ")
+                            .font(.footnote)
+                        Spacer()
+                        Text("\(port)")
+                            .font(.footnote)
+                    } //: HSTACK
+                } //: ELSE
+            } //: VSTACK
+            .padding(.horizontal, 8)
             ServerToolBar(globalStateManager: globalStateManager, server: server)
                 .padding(.all, 4)
             Divider()
@@ -125,9 +165,9 @@ struct ServerRow: View {
         // Select Server
         .onTapGesture {
             if currentServer != server {
+                portText = port
                 currentServer = server
                 selectedEndpoint = nil
-                isSelected = true
             }
         }
         // Change the background color if this is the current option
@@ -135,6 +175,9 @@ struct ServerRow: View {
             if currentServer == server { Color.gray }
         }
         .cornerRadius(4)
+        .onAppear {
+            portText = port
+        }
     }
 }
 
