@@ -8,19 +8,44 @@
 import SwiftUI
 
 struct EndpointDetailView: View {
-//    @Binding var currentServer: Server
-    @Binding var endpoint: Endpoint?
+    @Binding internal var endpoint: Endpoint?
+    @State private var path: String = ""
+    @State private var statusCode: String = ""
 
     var body: some View {
         if let endpoint = endpoint {
             VStack {
-                Text(endpoint.path)
-                Text("Status Code: \(endpoint.statusCode)")
+                HStack {
+                    Text("Path: ")
+                        .padding(.horizontal, 2)
+                    TextField("New path", text: $path)
+                        .background(Color.gray)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .cornerRadius(3)
+                        .onSubmit {
+                            self.endpoint?.path = path
+                        }
+                }
+                HStack {
+                    Text("Status Code: ")
+                        .padding()
+                    TextField("New Status Code", text: $statusCode)
+                        .background(Color.gray)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .cornerRadius(3)
+                        .onSubmit {
+                            if let statusCode = UInt(statusCode) {
+                                self.endpoint?.statusCode = statusCode
+                            }
+                        }
+                }
                 HttpActionPicker(httpAction: endpoint.action)
                 JSONInputTextEditor()
             }
+            .padding()
         } else {
             Text("")
+                .padding()
         }
     }
 }
