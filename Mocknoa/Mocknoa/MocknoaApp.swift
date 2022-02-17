@@ -10,15 +10,17 @@ import Vapor
 
 @main
 struct MocknoaApp: App {
-    var serverApp = try? VaporFactory.generateServer()
-//    var serverApp2 = try? VaporFactory.generateServer()
-    init() {
+    var globalStateManager = GlobalStateManager()
 
+    init() {
+//        let serverConfig = Server(name: "Test Server 1", port: 9000, endpoints: [])
+//        self.globalStateManager.addServerConfiguration(server: serverConfig)
+//        self.globalStateManager.startServer(server: serverConfig)
     }
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(globalStateManager: globalStateManager)
         }
     }
 }

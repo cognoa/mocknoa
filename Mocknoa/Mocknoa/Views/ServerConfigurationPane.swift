@@ -9,47 +9,59 @@ import SwiftUI
 
 /// Lists the currently selected server's endpoints
 struct ServerConfigurationPane: View {
-    @Binding var currentServer: Server
+    @StateObject internal var globalStateManager: GlobalStateManager
+    @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
     @State var showNewRow = false
 
     var body: some View {
-        VStack {
-            List {
-                ForEach(currentServer.endpoints, id:\.self) { endpoint in
-                    EndpointRow(selectedEndpoint: $selectedEndpoint, endpoint: endpoint)
-                }
-                if showNewRow {
-                    NewEndpointRow(showNewRow: $showNewRow, currentServer: $currentServer, selectedEndpoint: $selectedEndpoint)
-                }
-            } //: LIST
-            BottomToolBar(showNewRow: $showNewRow)
-        } //: VSTACK
+        if let currentServer = currentServer, let server = globalStateManager.getServerById(id: currentServer.id) {
+            VStack {
+                List {
+                    ForEach(server.sortedEndpoints, id:\.self) { endpoint in
+                        EndpointRow(selectedEndpoint: $selectedEndpoint, endpoint: endpoint)
+                    }
+                    if showNewRow {
+                        NewEndpointRow(
+                            globalStateManager: globalStateManager,
+                            showNewRow: $showNewRow,
+                            currentServer: $currentServer,
+                            selectedEndpoint: $selectedEndpoint)
+                    }
+                } //: LIST
+                BottomToolBar(showNewRow: $showNewRow)
+            } //: VSTACK
+        }
     }
 }
 
 /// Add new Endpoint button row
 struct NewEndpointRow: View {
+    @StateObject internal var globalStateManager: GlobalStateManager
     @State private var path: String = ""
     @Binding var showNewRow: Bool
-    @Binding var currentServer: Server
+    @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
 
     var body: some View {
-        HStack {
-            TextField("", text: $path)
-                .background(Color.gray)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .cornerRadius(3)
-            Spacer()
-            Button {
-                // Create new endpoint
-                let endpoint = Endpoint(path: path, action: .get, statusCode: 0000, jsonString: "SomeJSON")
-                currentServer.endpoints.append(endpoint)
-                selectedEndpoint = endpoint
-                showNewRow.toggle()
-            } label: {
-                Image(systemName: "plus")
+        if var currentServer = currentServer {
+            HStack {
+                TextField("", text: $path)
+                    .background(Color.gray)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .cornerRadius(3)
+                Spacer()
+                Button {
+                    // Create new endpoint                    
+                    guard let endpoint = globalStateManager.createEndpointOnServerWithDefaultSettings(server: currentServer, path: path) else {
+                        showNewRow.toggle()
+                        return
+                    }
+                    selectedEndpoint = endpoint
+                    showNewRow.toggle()
+                } label: {
+                    Image(systemName: "plus")
+                }
             }
         }
     }
@@ -73,9 +85,13 @@ struct EndpointRow: View {
         }
         // Switch to selected endpoint
         .onTapGesture {
-            if selectedEndpoint != endpoint {
-                selectedEndpoint = endpoint
-            }
+//            if selectedEndpoint != endpoint {
+
+            selectedEndpoint = endpoint
+//            }
+        }
+        .onAppear {
+            print("Server Endpoint Row: \(endpoint.path)")
         }
     }
 }

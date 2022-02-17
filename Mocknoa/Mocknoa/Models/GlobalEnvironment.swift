@@ -6,7 +6,12 @@
 //
 
 import Foundation
+import Vapor
 
-public struct GlobalEnvironment: Codable {
-    
+public class GlobalEnvironment: Codable {
+    public var servers: [String: Server] = [:]
+
+    public var sortedServers: [Server] {
+        return Array(servers.values).sortedByCreationDate
+    }
 }
