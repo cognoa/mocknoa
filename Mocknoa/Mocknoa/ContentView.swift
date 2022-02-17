@@ -162,6 +162,7 @@ struct ServerRow: View {
 struct PlayToolBar: View {
     var body: some View {
         HStack {
+            Spacer()
             Button {
                 print("Start Server")
             } label: {
