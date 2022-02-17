@@ -81,7 +81,6 @@ struct NewServerRow: View {
     @StateObject internal var globalStateManager: GlobalStateManager
     @State private var name: String = ""
     @Binding var showNewServerRow: Bool
-//    @Binding var servers: [Server]
 
 
     var body: some View {
@@ -107,7 +106,6 @@ struct ServerRow: View {
     @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
     @State private var isSelected = false
-    @State private var presentDeleteButton = false
     var server: Server
 
     var body: some View {
@@ -117,29 +115,14 @@ struct ServerRow: View {
                     .padding(.horizontal, 8)
                     .padding(.vertical, 1)
                 Spacer()
-                if presentDeleteButton {
-                    Button {
-                        // Delete server
-                        globalStateManager.deleteServerConfiguration(server: server)
-                    } label: {
-                        Image(systemName: "xmark")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .clipShape(Circle())
-                            .foregroundColor(.red)
-                    }
-                }
             } //: HSTACK
-            // Display delete button when hovering over server row
-            .onHover { isHovering in
-                presentDeleteButton = isHovering
-            }
-            PlayToolBar()
+            ServerToolBar(globalStateManager: globalStateManager, server: server)
+                .padding(.all, 4)
             Divider()
         } //: VSTACK
         // Needed to make the entire VStack tappable for `onTapGesture` to work
         .contentShape(Rectangle())
-        // Select a server
+        // Select Server
         .onTapGesture {
             if currentServer != server {
                 currentServer = server
@@ -151,24 +134,28 @@ struct ServerRow: View {
 //                currentServer.endpoints = currentServerEndpoints
 //            }
         }
-
-    // Change the background color if this is the current option
+        // Change the background color if this is the current option
         .background {
             if currentServer == server { Color.gray }
         }
         .cornerRadius(4)
-        .padding(.all, 2)
     }
 }
 
-struct PlayToolBar: View {
+struct ServerToolBar: View {
+    @ObservedObject internal var globalStateManager: GlobalStateManager
+    var server: Server
+    let minSize: CGFloat = 7
+
     var body: some View {
         HStack {
-            Spacer()
             Button {
                 print("Start Server")
             } label: {
                 Image(systemName: "play.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(minWidth: minSize, minHeight: minSize)
             } // Start Button
             .clipShape(Circle())
             .aspectRatio(contentMode: .fit)
@@ -177,7 +164,26 @@ struct PlayToolBar: View {
                 print("Stop Server")
             } label: {
                 Image(systemName: "stop.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(minWidth: minSize, minHeight: minSize)
             } // Stop Button
+            .clipShape(Circle())
+            .aspectRatio(contentMode: .fit)
+
+            Spacer()
+
+            Button {
+                // Delete server
+                globalStateManager.deleteServerConfiguration(server: server)
+            } label: {
+                Image(systemName: "xmark")
+                    .resizable()
+                    .font(Font.title.weight(.bold))
+                    .aspectRatio(contentMode: .fit)
+                    .frame(minWidth: minSize, minHeight: minSize)
+                    .foregroundColor(.red)
+            } // Delete Button
             .clipShape(Circle())
             .aspectRatio(contentMode: .fit)
         } //: HSTACK
