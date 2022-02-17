@@ -22,6 +22,10 @@ public class GlobalStateManager: ObservableObject {
         globalSelectionStatus.currentServer = server
     }
 
+    public func setPort(for server: Server?, with number: UInt) {
+        globalSelectionStatus.currentServer = server
+    }
+
     public func setSelectedEndpoint(endpoint: Endpoint) {
         globalSelectionStatus.selectedEndpoint = endpoint
     }
