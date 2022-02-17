@@ -11,22 +11,57 @@ import SwiftUI
 struct ServerConfigurationPane: View {
     @Binding var currentServer: Server
     @Binding var selectedEndpoint: Endpoint?
+    @State var showNewRow = false
 
     var body: some View {
-        ForEach(currentServer.endpoints, id:\.self) { endpoint in
-                HStack {
-                    Text(endpoint.path)
-                    Spacer()
+        VStack {
+            List {
+                ForEach(currentServer.endpoints, id:\.self) { endpoint in
+                    HStack {
+                        Text(endpoint.path)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.top, 8)
+                    // Switch to selected endpoint
+                    .onTapGesture {
+                        if selectedEndpoint != endpoint {
+                            selectedEndpoint = endpoint
+                        }
+                    }
                 }
-                .padding(.horizontal, 8)
-                .padding(.top, 8)
-            // Switch to selected endpoint
-            .onTapGesture {
-                if selectedEndpoint != endpoint {
-                    selectedEndpoint = endpoint
+                if showNewRow {
+                    NewEndpointRow(showNewRow: $showNewRow, currentServer: $currentServer, selectedEndpoint: $selectedEndpoint)
                 }
+            } //: LIST
+            BottomToolBar(showNewRow: $showNewRow)
+        } //: VSTACK
+    }
+}
+
+/// Add new server button row
+struct NewEndpointRow: View {
+    @State private var path: String = ""
+    @Binding var showNewRow: Bool
+    @Binding var currentServer: Server
+    @Binding var selectedEndpoint: Endpoint?
+
+    var body: some View {
+        HStack {
+            TextField("", text: $path)
+                .background(Color.gray)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .cornerRadius(3)
+            Spacer()
+            Button {
+                // Create new endpoint
+                let endpoint = Endpoint(path: path, action: .get, statusCode: 0000, jsonString: "SomeJSON")
+                currentServer.endpoints.append(endpoint)
+                selectedEndpoint = endpoint
+                showNewRow.toggle()
+            } label: {
+                Image(systemName: "plus")
             }
         }
-        Spacer()
     }
 }

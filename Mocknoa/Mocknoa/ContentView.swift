@@ -60,21 +60,7 @@ struct SidebarView: View {
             } //: LIST
             .listStyle(SidebarListStyle()) // Gives you this sweet sidebar look
             // Bottom add server button row
-            HStack(alignment: .center) {
-                Button {
-                    showNewServerRow.toggle()
-                } label: {
-                    Image(systemName: "plus")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(Color.white)
-                        .padding(.all, 2)
-                }
-                .aspectRatio(contentMode: .fit)
-                .padding(.vertical, 1)
-                .padding(.horizontal, 2)
-                Spacer()
-            } //: HSTACK
+            BottomToolBar(showNewRow: $showNewServerRow)
         }
     }
 }
@@ -89,7 +75,8 @@ struct NewServerRow: View {
     var body: some View {
         HStack {
             TextField("", text: $name)
-                .background { Color.gray }
+                .background(Color.gray)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
                 .cornerRadius(3)
             Spacer()
             Button {
