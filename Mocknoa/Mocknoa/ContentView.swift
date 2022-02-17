@@ -137,6 +137,8 @@ struct ServerRow: View {
             PlayToolBar()
             Divider()
         } //: VSTACK
+        // Needed to make the entire VStack tappable for `onTapGesture` to work
+        .contentShape(Rectangle())
         // Select a server
         .onTapGesture {
             if currentServer != server {
