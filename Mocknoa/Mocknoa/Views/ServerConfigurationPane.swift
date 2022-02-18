@@ -18,18 +18,24 @@ struct ServerConfigurationPane: View {
     var body: some View {
         if let currentServer = currentServer, let server = globalStateManager.getServerById(id: currentServer.id) {
             VStack {
-                VStack(alignment: .leading) {
+                GroupBox {
+                    VStack(alignment: .leading) {
                     Text("Server Name")
                     TextField("", text: $serverName)
+                            .cornerRadius(5)
                         .onSubmit {
                             self.globalStateManager.setName(server: currentServer, name: serverName)
                         }
                     Text("Server Port")
+                            .padding(.top, 2)
                     TextField("", text: $serverPort)
+                            .cornerRadius(5)
                         .onSubmit {
                             guard let portNumber = UInt(serverPort) else { return }
                             self.globalStateManager.setPort(server: currentServer, port: UInt(portNumber))
                         }
+                    }
+                    .padding(.all, 4)
                 }
                 List {
                     ForEach(server.sortedEndpoints, id:\.self) { endpoint in
