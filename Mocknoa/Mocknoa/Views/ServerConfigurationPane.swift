@@ -20,17 +20,20 @@ struct ServerConfigurationPane: View {
             VStack {
                 VStack(alignment: .leading) {
                     Text("Server Name")
+                        .fontWeight(.bold)
                     TextField("", text: $serverName)
                         .onSubmit {
                             self.globalStateManager.setName(server: currentServer, name: serverName)
                         }
                     Text("Server Port")
+                        .fontWeight(.bold)
                     TextField("", text: $serverPort)
                         .onSubmit {
                             guard let portNumber = UInt(serverPort) else { return }
                             self.globalStateManager.setPort(server: currentServer, port: UInt(portNumber))
                         }
                 }
+                .padding(.horizontal, 10)
                 List {
                     ForEach(server.sortedEndpoints, id:\.self) { endpoint in
                         EndpointRow(selectedEndpoint: $selectedEndpoint, endpoint: endpoint)

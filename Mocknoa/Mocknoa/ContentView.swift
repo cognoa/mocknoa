@@ -146,13 +146,10 @@ struct ServerRow: View {
 
 
                 HStack {
-                    Text("Port: ")
+                    Text("Port: \(port)")
                         .font(.body)
                         .fontWeight(.semibold)
                     Spacer()
-                    Text("\(port)")
-                        .font(.body)
-                        .fontWeight(.semibold)
                 } //: ELSE
             } //: VSTACK
             .padding(.horizontal, 4)
@@ -180,24 +177,24 @@ struct ServerToolBar: View {
                 print("Start Server")
                 globalStateManager.startServer(server: server)
             } label: {
-                Image(systemName: "play.fill")
+                Image(systemName: "play.circle.fill")
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .foregroundColor(.green)
+                    .aspectRatio(contentMode: .fill)
                     .frame(minWidth: minSize, minHeight: minSize)
             }
-            .clipShape(Circle())
             .aspectRatio(contentMode: .fit)
 
             // Stop Button
             Button {
                 globalStateManager.stopServer(server: server)
             } label: {
-                Image(systemName: "stop.fill")
+                Image(systemName: "stop.circle.fill")
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .foregroundColor(.red)
+                    .aspectRatio(contentMode: .fill)
                     .frame(minWidth: minSize, minHeight: minSize)
             }
-            .clipShape(Circle())
             .aspectRatio(contentMode: .fit)
 
             Spacer()
@@ -206,14 +203,12 @@ struct ServerToolBar: View {
             Button {
                 showAlert = true
             } label: {
-                Image(systemName: "xmark")
+                Image(systemName: "minus.circle")
                     .resizable()
-                    .font(Font.title.weight(.bold))
-                    .aspectRatio(contentMode: .fit)
-                    .frame(minWidth: minSize, minHeight: minSize)
                     .foregroundColor(.red)
+                    .aspectRatio(contentMode: .fill)
+                    .frame(minWidth: minSize, minHeight: minSize)
             } // Delete Button
-            .clipShape(Circle())
             .aspectRatio(contentMode: .fit)
             .alert(isPresented: $showAlert) {
                     Alert(

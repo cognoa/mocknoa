@@ -15,44 +15,53 @@ struct EndpointDetailView: View {
     @State private var path: String = ""
     @State private var statusCode: String = ""
     @State private var jsonText: String = ""
+    private let leadingPadding: CGFloat = 10
     var body: some View {
         if let endpoint = endpoint, let currentServer = currentServer {
-            VStack {
-                HStack {
-                    Text("Path: ")
-                        .padding(.horizontal, 2)
+            VStack (alignment: .leading) {
+                Text("Path: ")
+                    .padding(.leading, leadingPadding)
+                TextField("New path", text: $path)
+                    .background(Color.gray)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .cornerRadius(3)
+                    .onSubmit {
+                        print("Endpoint Path Textfield Submitted")
+                        self.endpoint?.path = path
+                        updateEndpoint()
+                    }
+                    .padding(.leading, leadingPadding)
 
-                    TextField("New path", text: $path)
-                        .background(Color.gray)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .cornerRadius(3)
-                        .onSubmit {
-                            print("Endpoint Path Textfield Submitted")
-                            self.endpoint?.path = path
+                Text("Status Code: ")
+                    .padding(.leading, leadingPadding)
+                TextField("New Status Code", text: $statusCode)
+                    .background(Color.gray)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .cornerRadius(3)
+                    .onSubmit {
+                        if let statusCode = UInt(statusCode) {
+                            self.endpoint?.statusCode = statusCode
                             updateEndpoint()
                         }
-                }
-                HStack {
-                    Text("Status Code: ")
-                        .padding()
-                    TextField("New Status Code", text: $statusCode)
-                        .background(Color.gray)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .cornerRadius(3)
-                        .onSubmit {
-                            if let statusCode = UInt(statusCode) {
-                                self.endpoint?.statusCode = statusCode
-                                updateEndpoint()
-                            }
-                        }
-                }
+                    }
+                    .padding(.leading, leadingPadding)
+
 
                 if let httpAction = httpAction {
                     HttpActionPicker(globalStateManager: globalStateManager, server: currentServer, endpoint: $endpoint, httpAction: $httpAction, localHttpAction: httpAction)
                 }
-                JSONInputTextEditor(globalStateManager: globalStateManager, server: currentServer, endpoint: $endpoint, jsonText: $jsonText)
+                Divider()
+                    .padding(.top, 10)
+                JSONInputTextEditor(
+                    globalStateManager: globalStateManager,
+                    server: currentServer,
+                    endpoint: $endpoint,
+                    jsonText: $jsonText
+                ).padding(.horizontal, 10)
+                    .padding(.bottom, 10)
             }
-            .padding()
+            .padding(.top, 10)
+            .padding(.trailing, 10)
             .onAppear {
                 print("Endpoint detail did appear")
                 if let globalEndpoint = globalStateManager.getEndpointBy(id: endpoint.id, server: currentServer) {
@@ -69,9 +78,6 @@ struct EndpointDetailView: View {
                     jsonText = globalEndpoint.jsonString
                 }
             }
-        } else {
-            Text("")
-                .padding()
         }
     }
 
@@ -91,7 +97,9 @@ struct HttpActionPicker: View {
     @State internal var localHttpAction: HttpAction
 
     var body: some View {
-        Picker("Http Action", selection: $localHttpAction) {
+        Text("HTTP Action:")
+            .padding(.leading, 10)
+        Picker("", selection: $localHttpAction) {
             ForEach(HttpAction.allCases) { action in
                 Text(action.rawValue.capitalized)
             }
