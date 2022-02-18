@@ -11,17 +11,18 @@ struct EndpointDetailView: View {
     @StateObject internal var globalStateManager: GlobalStateManager
     @Binding internal var endpoint: Endpoint?
     @Binding internal var currentServer: Server?
-    @State var httpAction: HttpAction?
-    @State private var path: String = ""
+    @State internal var httpAction: HttpAction?
+    @State private var path: String       = ""
     @State private var statusCode: String = ""
-    @State private var jsonText: String = ""
+    @State private var jsonText: String   = ""
+
     var body: some View {
         if let endpoint = endpoint, let currentServer = currentServer {
             VStack {
                 HStack {
                     Text("Path: ")
                         .padding(.horizontal, 2)
-
+                        .frame(minWidth: 100, alignment: .leading)
                     TextField("New path", text: $path)
                         .background(Color.gray)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -31,10 +32,11 @@ struct EndpointDetailView: View {
                             self.endpoint?.path = path
                             updateEndpoint()
                         }
-                }
+                } //: HSTACK
                 HStack {
                     Text("Status Code: ")
-                        .padding()
+                        .padding(.horizontal, 2)
+                        .frame(minWidth: 100, alignment: .leading)
                     TextField("New Status Code", text: $statusCode)
                         .background(Color.gray)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -45,13 +47,15 @@ struct EndpointDetailView: View {
                                 updateEndpoint()
                             }
                         }
-                }
+                } //: HSTACK
 
                 if let httpAction = httpAction {
                     HttpActionPicker(globalStateManager: globalStateManager, server: currentServer, endpoint: $endpoint, httpAction: $httpAction, localHttpAction: httpAction)
+                        .padding(.vertical, 10)
                 }
                 JSONInputTextEditor(globalStateManager: globalStateManager, server: currentServer, endpoint: $endpoint, jsonText: $jsonText)
-            }
+                    .padding(.top, 8)
+            } //: VSTACK
             .padding()
             .onAppear {
                 print("Endpoint detail did appear")
@@ -104,11 +108,11 @@ struct HttpActionPicker: View {
                 globalStateManager.updateEndpointOnServer(server: server, endpoint: localEndpoint)
             }
         })
-        .onAppear {
-            if let httpAction = httpAction {
-                localHttpAction = httpAction
+            .onAppear {
+                if let httpAction = httpAction {
+                    localHttpAction = httpAction
+                }
             }
-        }
     }
 }
 
