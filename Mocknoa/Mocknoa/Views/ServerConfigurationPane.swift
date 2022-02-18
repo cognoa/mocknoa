@@ -41,14 +41,14 @@ struct ServerConfigurationPane: View {
                     ForEach(server.sortedEndpoints, id:\.self) { endpoint in
                         EndpointRow(selectedEndpoint: $selectedEndpoint, endpoint: endpoint)
                     }
-                    if showNewRow {
-                        NewEndpointRow(
-                            globalStateManager: globalStateManager,
-                            showNewRow: $showNewRow,
-                            currentServer: $currentServer,
-                            selectedEndpoint: $selectedEndpoint)
-                    }
                 } //: LIST
+                if showNewRow {
+                    NewEndpointRow(
+                        globalStateManager: globalStateManager,
+                        showNewRow: $showNewRow,
+                        currentServer: $currentServer,
+                        selectedEndpoint: $selectedEndpoint)
+                }
                 BottomToolBar(showNewRow: $showNewRow)
             }.onAppear {
                 serverName = currentServer.name
@@ -71,7 +71,7 @@ struct NewEndpointRow: View {
     @Binding var selectedEndpoint: Endpoint?
 
     var body: some View {
-        if var currentServer = currentServer {
+        if let currentServer = currentServer {
             HStack {
                 TextField("", text: $path)
                     .background(Color.gray)
