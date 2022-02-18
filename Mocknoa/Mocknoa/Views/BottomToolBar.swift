@@ -13,6 +13,7 @@ struct BottomToolBar: View {
     var body: some View {
         Button {
             showNewRow.toggle()
+
         } label: {
             HStack {
                 Spacer()

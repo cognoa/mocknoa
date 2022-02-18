@@ -10,12 +10,19 @@ import Vapor
 import SwiftUI
 
 public class VaporFactory {
+    public static var dispatchQueues: [String: DispatchQueue] = [:]
+    public static var loggingInstantiated: Bool = false
+
     public static func generateServer(server: Server, completion: @escaping (Application?, DispatchQueue, Error?) -> Void) {
         let serverQueue = DispatchQueue(label: server.id, attributes: .concurrent)
+        dispatchQueues[server.id] = serverQueue
         serverQueue.async {
             do {
                 var env = try Environment.detect()
-                try LoggingSystem.bootstrap(from: &env)
+                if !loggingInstantiated {
+                    try LoggingSystem.bootstrap(from: &env)
+                }
+                loggingInstantiated = true
                 let app = Application(env)
                 defer { app.shutdown() }
                 try configure(app: app, server: server)
@@ -33,20 +40,10 @@ public class VaporFactory {
     }
 
     public static func routes(app: Application, server: Server) throws {
-        app.get { req in
-            return "Hello Jonathan"
-        }
-
-        app.get("hello") { req -> String in
-            return "Hello, world"
-        }
-
-        app.get("test") { req -> String in
-            return "test"
-        }
+        generateRoutes(app: app, server: server)
     }
 
-    private func generateRoutes(app: Application, server: Server) {
+    private static func generateRoutes(app: Application, server: Server) {
         let getEndpoints = server.endpoints.getEndpoints
         let postEndpoints = server.endpoints.postEndpoints
         let patchEndpoints = server.endpoints.patchEndpoints
@@ -56,35 +53,45 @@ public class VaporFactory {
         generatePostRoutes(app: app, server: server, endPoints: postEndpoints)
         generatePatchRoutes(app: app, server: server, endPoints: patchEndpoints)
         generateDeleteRoutes(app: app, server: server, endPoints: deleteEndpoints)
+        print("Routes")
+        print(app.routes)
     }
 
-    private func generateGetRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+    private static func generateGetRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            app.get("\(endpoint.trimmedPath())") { _ in
+            print("Configuring GET Endpoint: \(endpoint.trimmedPath())")
+            print("Path array: \(endpoint.pathComponents)")
+            app.get(endpoint.pathComponents) { _ in
                 return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
         }
     }
 
-    private func generatePostRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+    private static func generatePostRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            app.post("\(endpoint.trimmedPath())") { _ in
+            print("Configuring POST Endpoint: \(endpoint.trimmedPath())")
+            print("Path array: \(endpoint.pathComponents)")
+            app.post(endpoint.pathComponents) { _ in
                 return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
         }
     }
 
-    private func generatePatchRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+    private static func generatePatchRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            app.patch("\(endpoint.trimmedPath())") { _ in
+            print("Configuring Endpoint: \(endpoint.trimmedPath())")
+            print("Path array: \(endpoint.pathComponents)")
+            app.patch(endpoint.pathComponents) { _ in
                 return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
         }
     }
 
-    private func generateDeleteRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+    private static func generateDeleteRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            app.delete("\(endpoint.trimmedPath())") { _ in
+            print("Configuring Endpoint: \(endpoint.trimmedPath())")
+            print("Path array: \(endpoint.pathComponents)")
+            app.delete(endpoint.pathComponents) { _ in
                 return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
         }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Server: Codable, Hashable {
+public struct Server: Codable, Hashable, Identifiable {
     public var id = UUID().uuidString
     public var creationDate = Date()
     public var name: String
@@ -23,12 +23,19 @@ public struct Server: Codable, Hashable {
     }
 
     public static var defaultEndpoints: [String: Endpoint] {
-        let endpoint = Endpoint(path: "", action: .get, statusCode: 200, jsonString: "Default")
+        let endpoint = Endpoint(path: "/", action: .get, statusCode: 200, jsonString: "Default")
         return [endpoint.id: endpoint]
     }
 
     public static func defaultServer() -> Server {
         return Server(name: "New Server", port: 8080, endpointsDictionary: defaultEndpoints)
+    }
+
+    public static func indexOfServerInArrayOfServers(server: Server, servers: [Server]) -> Int {
+        for (index, localServer) in servers.enumerated() {
+            if server.id == localServer.id { return index }
+        }
+        return 0
     }
 }
 

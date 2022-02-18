@@ -54,22 +54,32 @@ struct SidebarView: View {
 
     var body: some View {
         VStack {
-            List {
-                ForEach(globalStateManager.globalEnvironment.sortedServers, id: \.self) { server in
+            List(globalStateManager.globalEnvironment.sortedServers, id: \.self, selection: $currentServer) { server in
                     ServerRow(
                         globalStateManager: globalStateManager,
                         currentServer: $currentServer,
                         selectedEndpoint: $selectedEndpoint,
-                        server: server)
-                }
-                if showNewServerRow {
-                    NewServerRow(
-                        globalStateManager: globalStateManager,
-                        showNewServerRow: $showNewServerRow)
-                }
-                Spacer()
+                        server: server
+                    )
+                    .listRowBackground(self.currentServer?.id == server.id ? Color.gray : Color.clear)
+                    .onTapGesture {
+                        if let currentServerLocal = self.currentServer, currentServerLocal.id != server.id {
+                            currentServer = server
+                            selectedEndpoint = nil
+                        }
+                    }
             } //: LIST
             .listStyle(SidebarListStyle())
+            .onChange(of: currentServer) { newValue in
+                print("Current Server: \(currentServer?.name)")
+            }
+            Spacer()
+            if showNewServerRow {
+                NewServerRow(
+                    globalStateManager: globalStateManager,
+                    showNewServerRow: $showNewServerRow)
+            }
+
             // Bottom add server button row
             BottomToolBar(showNewRow: $showNewServerRow)
         }
@@ -126,6 +136,7 @@ struct ServerRow: View {
                     Text(server.name)
                         .font(.headline)
                         .padding(.vertical, 1)
+                    Image(systemName: "macpro.gen2.fill")
                     Spacer()
                 } //: HSTACK
 
@@ -135,13 +146,12 @@ struct ServerRow: View {
                             .font(.footnote)
                         TextField("Add port number", text: $portText)
                             .multilineTextAlignment(.trailing)
-                            .font(.footnote)
+                            .font(.body)
                             .cornerRadius(4)
                             .padding(.horizontal, 2)
                             .onSubmit {
                                 if let portNumber = UInt(portText) {
-                                    globalStateManager.setPort(for: currentServer,
-                                                                  with: portNumber)
+                                    globalStateManager.setPort(server: server, port: portNumber)
                                 }
                             }
                     } //: HSTACK
@@ -156,24 +166,11 @@ struct ServerRow: View {
                 } //: ELSE
             } //: VSTACK
             .padding(.horizontal, 8)
+
             ServerToolBar(globalStateManager: globalStateManager, server: server)
                 .padding(.all, 4)
-            Divider()
+//            Divider()
         } //: VSTACK
-        // Needed to make the entire VStack tappable for `onTapGesture` to work
-        .contentShape(Rectangle())
-        // Select Server
-        .onTapGesture {
-            if currentServer != server {
-                portText = port
-                currentServer = server
-                selectedEndpoint = nil
-            }
-        }
-        // Change the background color if this is the current option
-        .background {
-            if currentServer == server { Color.gray }
-        }
         .cornerRadius(4)
         .onAppear {
             portText = port
@@ -184,36 +181,40 @@ struct ServerRow: View {
 struct ServerToolBar: View {
     @ObservedObject internal var globalStateManager: GlobalStateManager
     var server: Server
-    let minSize: CGFloat = 7
+    let minSize: CGFloat = 10
 
     var body: some View {
         HStack {
+            // Start Button
             Button {
                 print("Start Server")
+                globalStateManager.startServer(server: server)
             } label: {
                 Image(systemName: "play.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(minWidth: minSize, minHeight: minSize)
-            } // Start Button
+            }
             .clipShape(Circle())
             .aspectRatio(contentMode: .fit)
 
+            // Stop Button
             Button {
-                print("Stop Server")
+                globalStateManager.stopServer(server: server)
             } label: {
                 Image(systemName: "stop.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(minWidth: minSize, minHeight: minSize)
-            } // Stop Button
+            }
             .clipShape(Circle())
             .aspectRatio(contentMode: .fit)
 
             Spacer()
 
+            // Delete server
             Button {
-                // Delete server
+                globalStateManager.stopServer(server: server)
                 globalStateManager.deleteServerConfiguration(server: server)
             } label: {
                 Image(systemName: "xmark")

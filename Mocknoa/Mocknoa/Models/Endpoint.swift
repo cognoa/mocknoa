@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Vapor
 
 public struct Endpoint: Codable, Hashable {
     public var id: String = UUID().uuidString
@@ -16,7 +17,7 @@ public struct Endpoint: Codable, Hashable {
     public var creationDate = Date()
 
     public func defaultEndpoint() -> Endpoint {
-        return Endpoint(path: "", action: .get, statusCode: 200, jsonString: "")
+        return Endpoint(path: "/", action: .get, statusCode: 200, jsonString: "")
     }
 
     public func trimmedPath() -> String {
@@ -28,6 +29,18 @@ public struct Endpoint: Codable, Hashable {
         } else {
             return path
         }
+    }
+
+    public var pathArray: [String] {
+        let pathElements = trimmedPath().components(separatedBy: "/")
+        return pathElements
+    }
+
+    public var pathComponents: [PathComponent] {
+        let pathArray = self.pathArray
+        return pathArray.map({ component in
+            return PathComponent(stringLiteral: component)
+        })
     }
 }
 

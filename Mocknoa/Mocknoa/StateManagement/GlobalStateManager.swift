@@ -17,21 +17,22 @@ public class GlobalSelectionStatus: Codable {
 public class GlobalStateManager: ObservableObject {
     @Published public var globalEnvironment: GlobalEnvironment
     @Published public var globalSelectionStatus: GlobalSelectionStatus
+    @Published public var activeVaporServers: [String: Application] = [:]
+    private var serverDispatchQueues: [String: DispatchQueue] = [:]
 
     public func setCurrentServer(server: Server) {
         globalSelectionStatus.currentServer = server
     }
 
-    public func setPort(for server: Server?, with number: UInt) {
-        globalSelectionStatus.currentServer = server
+    public func setPort(server: Server, port: UInt) {
+        globalEnvironment.servers[server.id]?.port = port
+        self.objectWillChange.send()
+        saveGlobalEnvironment()
     }
 
     public func setSelectedEndpoint(endpoint: Endpoint) {
         globalSelectionStatus.selectedEndpoint = endpoint
     }
-
-    public var activeVaporServers: [String: Application] = [:]
-    private var serverDispatchQueues: [String: DispatchQueue] = [:]
 
     public init() {
         self.globalEnvironment = GlobalEnvironment()
@@ -50,7 +51,8 @@ public class GlobalStateManager: ObservableObject {
     }
 
     public func deleteServerConfiguration(server: Server) {
-        globalEnvironment.servers[server.id] = nil
+        globalEnvironment.servers.removeValue(forKey: server.id)
+        self.objectWillChange.send()
         saveGlobalEnvironment()
     }
 
@@ -69,17 +71,6 @@ extension GlobalStateManager {
         globalEnvironment.servers[server.id]?.endpointsDictionary[endpoint.id] = endpoint
         saveGlobalEnvironment()
     }
-
-//    public func updateEndpointBy(id: String, newEndpoint: Endpoint) {
-//        for (_, var server) in globalEnvironment.servers {
-//            for (endpointId, endpoint) in server.endpointsDictionary {
-//                if endpointId == endpoint.id {
-//                    server.endpointsDictionary[id] = newEndpoint
-//                }
-//            }
-//        }
-//        saveGlobalEnvironment()
-//    }
 
     public func createEndpointOnServerWithDefaultSettings(server: Server, path: String) -> Endpoint? {
         let endpoint = Endpoint(path: path, action: .get, statusCode: 200, jsonString: "")
@@ -114,7 +105,6 @@ extension GlobalStateManager {
 extension GlobalStateManager {
     public func startServer(server: Server) {
         guard activeVaporServers[server.id] == nil else  {
-            // Server is already running
             return
         }
 
@@ -135,6 +125,7 @@ extension GlobalStateManager {
             return
         }
         activeServer.shutdown()
+        activeVaporServers.removeValue(forKey: server.id)
     }
 }
 
