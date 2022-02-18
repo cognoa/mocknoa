@@ -129,7 +129,8 @@ struct ServerRow: View {
                         .foregroundColor(globalStateManager.activeVaporServers[server.id] != nil ? .green : .red)
                         .font(.system(size: 17))
 //                        .frame(width: 20, height: 30, alignment: .center)
-//                        .padding(.trailing, 15)
+                        .padding(.horizontal, 2)
+                        .padding(.bottom, 2)
                 } //: HSTACK
 
 
@@ -141,6 +142,7 @@ struct ServerRow: View {
                     Text(String(server.port))
                         .font(.body)
                         .fontWeight(.semibold)
+                        .padding(.horizontal, 2)
                 } //: ELSE
             } //: VSTACK
             .padding(.horizontal, 4)
