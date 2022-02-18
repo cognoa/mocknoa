@@ -24,10 +24,10 @@ public class VaporFactory {
                 }
                 loggingInstantiated = true
                 let app = Application(env)
-                defer { app.shutdown() }
+//                defer { app.shutdown() }
                 try configure(app: app, server: server)
-                try app.run()
                 completion(app, serverQueue, nil)
+                try app.run()
             } catch {
                 completion(nil, serverQueue, error)
             }

@@ -24,6 +24,12 @@ public class GlobalStateManager: ObservableObject {
         globalSelectionStatus.currentServer = server
     }
 
+    public func setName(server: Server, name: String) {
+        globalEnvironment.servers[server.id]?.name = name
+        self.objectWillChange.send()
+        saveGlobalEnvironment()
+    }
+
     public func setPort(server: Server, port: UInt) {
         globalEnvironment.servers[server.id]?.port = port
         self.objectWillChange.send()
@@ -112,20 +118,35 @@ extension GlobalStateManager {
             if let error = error {
                 print("Error generating server \(error)")
             } else if let app = app {
-                self.activeVaporServers[server.id] = app
-                self.serverDispatchQueues[server.id] = queue
+                DispatchQueue.main.async {
+                    self.activeVaporServers[server.id] = app
+                    self.serverDispatchQueues[server.id] = queue
+                    self.objectWillChange.send()
+                }
             }
         }
+
         MocknoaFileManager.saveGlobalEnvironment(globalEnvironment)
     }
 
     public func stopServer(server: Server) {
-        guard let activeServer = activeVaporServers[server.id] else {
+        guard
+            let activeServer = activeVaporServers[server.id],
+            let serverQueue = serverDispatchQueues[server.id]
+        else {
             // There is no server with the specified ID running so return
             return
         }
-        activeServer.shutdown()
+
+        serverQueue.async {
+            activeServer.shutdown()
+        }
         activeVaporServers.removeValue(forKey: server.id)
+        self.objectWillChange.send()
+    }
+
+    public func serverIsActive(server: Server) -> Bool {
+        return activeVaporServers[server.id] != nil
     }
 }
 

@@ -13,10 +13,24 @@ struct ServerConfigurationPane: View {
     @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
     @State var showNewRow = false
-
+    @State var serverName: String = ""
+    @State var serverPort: String = ""
     var body: some View {
         if let currentServer = currentServer, let server = globalStateManager.getServerById(id: currentServer.id) {
             VStack {
+                VStack(alignment: .leading) {
+                    Text("Server Name")
+                    TextField("", text: $serverName)
+                        .onSubmit {
+                            self.globalStateManager.setName(server: currentServer, name: serverName)
+                        }
+                    Text("Server Port")
+                    TextField("", text: $serverPort)
+                        .onSubmit {
+                            guard let portNumber = UInt(serverPort) else { return }
+                            self.globalStateManager.setPort(server: currentServer, port: UInt(portNumber))
+                        }
+                }
                 List {
                     ForEach(server.sortedEndpoints, id:\.self) { endpoint in
                         EndpointRow(selectedEndpoint: $selectedEndpoint, endpoint: endpoint)
@@ -30,9 +44,15 @@ struct ServerConfigurationPane: View {
                     }
                 } //: LIST
                 BottomToolBar(showNewRow: $showNewRow)
+            }.onAppear {
+                serverName = currentServer.name
+                serverPort = String(currentServer.port)
+            }.onChange(of: self.currentServer) { newValue in
+                guard let localCurrentServer = newValue else { return }
+                serverName = localCurrentServer.name
+                serverPort = String(localCurrentServer.port)
             }
         }
-
     }
 }
 

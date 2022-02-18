@@ -134,41 +134,30 @@ struct ServerRow: View {
             VStack {
                 HStack {
                     Text(server.name)
-                        .font(.headline)
-                        .padding(.vertical, 1)
-                    Image(systemName: "macpro.gen2.fill")
+                        .font(.title3)
+                        .fontWeight(.bold)
                     Spacer()
+                    Image(systemName: "macpro.gen2.fill")
+                        .foregroundColor(globalStateManager.activeVaporServers[server.id] != nil ? .green : .red)
+                        .font(.system(size: 17))
+//                        .frame(width: 20, height: 30, alignment: .center)
+//                        .padding(.trailing, 15)
                 } //: HSTACK
 
-                if currentServer != server {
-                    HStack {
-                        Text("Port: ")
-                            .font(.footnote)
-                        TextField("Add port number", text: $portText)
-                            .multilineTextAlignment(.trailing)
-                            .font(.body)
-                            .cornerRadius(4)
-                            .padding(.horizontal, 2)
-                            .onSubmit {
-                                if let portNumber = UInt(portText) {
-                                    globalStateManager.setPort(server: server, port: portNumber)
-                                }
-                            }
-                    } //: HSTACK
-                } else {
-                    HStack {
-                        Text("Port: ")
-                            .font(.footnote)
-                        Spacer()
-                        Text("\(port)")
-                            .font(.footnote)
-                    } //: HSTACK
+
+                HStack {
+                    Text("Port: ")
+                        .font(.body)
+                        .fontWeight(.semibold)
+                    Spacer()
+                    Text("\(port)")
+                        .font(.body)
+                        .fontWeight(.semibold)
                 } //: ELSE
             } //: VSTACK
-            .padding(.horizontal, 8)
-
+            .padding(.horizontal, 4)
             ServerToolBar(globalStateManager: globalStateManager, server: server)
-                .padding(.all, 4)
+                .padding(.top, 4)
 //            Divider()
         } //: VSTACK
         .cornerRadius(4)
@@ -182,6 +171,7 @@ struct ServerToolBar: View {
     @ObservedObject internal var globalStateManager: GlobalStateManager
     var server: Server
     let minSize: CGFloat = 10
+    @State private var showAlert = false
 
     var body: some View {
         HStack {
@@ -214,8 +204,7 @@ struct ServerToolBar: View {
 
             // Delete server
             Button {
-                globalStateManager.stopServer(server: server)
-                globalStateManager.deleteServerConfiguration(server: server)
+                showAlert = true
             } label: {
                 Image(systemName: "xmark")
                     .resizable()
@@ -226,6 +215,25 @@ struct ServerToolBar: View {
             } // Delete Button
             .clipShape(Circle())
             .aspectRatio(contentMode: .fit)
+            .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Confirm Delete"),
+                        message: Text("Are you sure you want to delete this server? This action cannot be undone."),
+                        primaryButton: .default(
+                            Text("Cancel"),
+                            action: {
+
+                            }
+                        ),
+                        secondaryButton: .destructive(
+                            Text("Delete"),
+                            action: {
+                                self.globalStateManager.stopServer(server: server)
+                                self.globalStateManager.deleteServerConfiguration(server: server)
+                            }
+                        )
+                    )
+                }
         } //: HSTACK
     }
 }
