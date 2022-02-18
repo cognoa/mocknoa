@@ -108,6 +108,7 @@ struct NewServerRow: View {
                 Image(systemName: "plus")
             }
         }
+        .padding(.horizontal, 8)
     }
 }
 
@@ -222,5 +223,6 @@ struct ServerToolBar: View {
                     )
                 }
         } //: HSTACK
+        .padding(.bottom, 4)
     }
 }
