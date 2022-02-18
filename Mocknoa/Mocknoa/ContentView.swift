@@ -30,11 +30,11 @@ struct ContentView: View {
             ServerConfigurationPane(globalStateManager: globalStateManager,
                                     currentServer: $currentServer,
                                     selectedEndpoint: $selectedEndpoint)
-                .panelFrame(minWidth: smallPanelMinWidth, idealWidth: smallPanelIdealWidth)
+                .panelFrame(minWidth: smallPanelMinWidth, idealWidth: largePanelMinWidth)
 
             // Endpoint configuration View
             EndpointDetailView(globalStateManager: globalStateManager, endpoint: $selectedEndpoint, currentServer: $currentServer)
-                .panelFrame(minWidth: largePanelMinWidth, idealWidth: largePanelIdealWidth)
+                .panelFrame(minWidth: largePanelIdealWidth, idealWidth: largePanelIdealWidth + smallPanelMinWidth)
 
         }
         .panelFrame()
@@ -42,7 +42,8 @@ struct ContentView: View {
             currentServer = globalStateManager.globalEnvironment.sortedServers.first
         }
     }
-}
+}    
+
 /// List of current Servers
 struct SidebarView: View {
     @StateObject internal var globalStateManager: GlobalStateManager
@@ -61,7 +62,7 @@ struct SidebarView: View {
                         selectedEndpoint: $selectedEndpoint,
                         server: server
                     )
-                    .listRowBackground(self.currentServer?.id == server.id ? Color.gray : Color.clear)
+//                    .listRowBackground(self.currentServer?.id == server.id ? Color.gray : Color.clear)
                     .onTapGesture {
                         if let currentServerLocal = self.currentServer, currentServerLocal.id != server.id {
                             currentServer = server
@@ -71,13 +72,14 @@ struct SidebarView: View {
             } //: LIST
             .listStyle(SidebarListStyle())
             .onChange(of: currentServer) { newValue in
-                print("Current Server: \(currentServer?.name)")
+                selectedEndpoint = nil
             }
             Spacer()
             if showNewServerRow {
                 NewServerRow(
                     globalStateManager: globalStateManager,
                     showNewServerRow: $showNewServerRow)
+                    .padding(.horizontal, 4)
             }
 
             // Bottom add server button row
@@ -138,10 +140,8 @@ struct ServerRow: View {
                         .fontWeight(.bold)
                     Spacer()
                     Image(systemName: "macpro.gen2.fill")
-                        .foregroundColor(globalStateManager.activeVaporServers[server.id] != nil ? .green : .red)
+                        .foregroundColor(globalStateManager.activeVaporServers[server.id] != nil ? .green : .gray)
                         .font(.system(size: 17))
-//                        .frame(width: 20, height: 30, alignment: .center)
-//                        .padding(.trailing, 15)
                 } //: HSTACK
 
 

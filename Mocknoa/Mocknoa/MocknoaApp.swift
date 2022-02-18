@@ -8,6 +8,7 @@
 import SwiftUI
 import Vapor
 
+
 @main
 struct MocknoaApp: App {
     var globalStateManager = GlobalStateManager()
@@ -15,10 +16,11 @@ struct MocknoaApp: App {
     init() {
         globalStateManager.appIsIniting()
     }
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView(globalStateManager: globalStateManager)
+                .preferredColorScheme(.dark)
         }
     }
 }
