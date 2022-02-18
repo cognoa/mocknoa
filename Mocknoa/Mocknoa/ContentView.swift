@@ -62,7 +62,6 @@ struct SidebarView: View {
                         selectedEndpoint: $selectedEndpoint,
                         server: server
                     )
-//                    .listRowBackground(self.currentServer?.id == server.id ? Color.gray : Color.clear)
                     .onTapGesture {
                         if let currentServerLocal = self.currentServer, currentServerLocal.id != server.id {
                             currentServer = server

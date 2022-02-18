@@ -24,7 +24,6 @@ public class VaporFactory {
                 }
                 loggingInstantiated = true
                 let app = Application(env)
-//                defer { app.shutdown() }
                 try configure(app: app, server: server)
                 completion(app, serverQueue, nil)
                 try app.run()
@@ -59,8 +58,6 @@ public class VaporFactory {
 
     private static func generateGetRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            print("Configuring GET Endpoint: \(endpoint.trimmedPath())")
-            print("Path array: \(endpoint.pathComponents)")
             app.get(endpoint.pathComponents) { _ in
                 return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
@@ -69,8 +66,6 @@ public class VaporFactory {
 
     private static func generatePostRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            print("Configuring POST Endpoint: \(endpoint.trimmedPath())")
-            print("Path array: \(endpoint.pathComponents)")
             app.post(endpoint.pathComponents) { _ in
                 return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
@@ -79,8 +74,6 @@ public class VaporFactory {
 
     private static func generatePatchRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            print("Configuring Endpoint: \(endpoint.trimmedPath())")
-            print("Path array: \(endpoint.pathComponents)")
             app.patch(endpoint.pathComponents) { _ in
                 return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
@@ -89,8 +82,6 @@ public class VaporFactory {
 
     private static func generateDeleteRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            print("Configuring Endpoint: \(endpoint.trimmedPath())")
-            print("Path array: \(endpoint.pathComponents)")
             app.delete(endpoint.pathComponents) { _ in
                 return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
