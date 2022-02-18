@@ -36,7 +36,7 @@ struct ServerConfigurationPane: View {
                         }
                     }
                     .padding(.all, 4)
-                }
+                } //: GROUP BOX
                 List {
                     ForEach(server.sortedEndpoints, id:\.self) { endpoint in
                         EndpointRow(selectedEndpoint: $selectedEndpoint, endpoint: endpoint)
@@ -104,13 +104,14 @@ struct EndpointRow: View {
                 .fontWeight(.bold)
                 .foregroundColor(endpoint.action.displayColor)
                 .frame(width: 55, height: 22, alignment: .leading)
+            Spacer()
             Text("\(endpoint.path)")
                 .fontWeight(.semibold)
-                .padding(.horizontal, 8)
+                .frame(alignment: .trailing)
                 .padding(.vertical, 1)
                 .cornerRadius(4)
-            Spacer()
         }
+        .padding(.horizontal, 3)
         // Change the background color if this is the current option
         .background {
             if selectedEndpoint == endpoint { Color.gray }
