@@ -23,7 +23,7 @@ struct EndpointDetailView: View {
                     Text("Path: ")
                         .padding(.horizontal, 2)
                         .frame(minWidth: 100, alignment: .leading)
-                    TextField("New path", text: $path)
+                    TextField("", text: $path)
                         .background(Color.gray)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .cornerRadius(3)
