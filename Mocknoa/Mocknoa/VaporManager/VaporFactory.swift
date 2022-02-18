@@ -61,7 +61,7 @@ public class VaporFactory {
     private func generateGetRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
             app.get("\(endpoint.trimmedPath())") { _ in
-                return endpoint.jsonString
+                return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
         }
     }
@@ -69,7 +69,7 @@ public class VaporFactory {
     private func generatePostRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
             app.post("\(endpoint.trimmedPath())") { _ in
-                return endpoint.jsonString
+                return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
         }
     }
@@ -77,7 +77,7 @@ public class VaporFactory {
     private func generatePatchRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
             app.patch("\(endpoint.trimmedPath())") { _ in
-                return endpoint.jsonString
+                return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
         }
     }
@@ -85,7 +85,7 @@ public class VaporFactory {
     private func generateDeleteRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
             app.delete("\(endpoint.trimmedPath())") { _ in
-                return endpoint.jsonString
+                return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
             }
         }
     }

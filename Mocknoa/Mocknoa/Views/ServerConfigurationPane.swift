@@ -70,11 +70,16 @@ struct NewEndpointRow: View {
 
 struct EndpointRow: View {
     @Binding internal var selectedEndpoint: Endpoint?
-    internal let endpoint: Endpoint
+    @State internal var endpoint: Endpoint
 
     var body: some View {
         HStack {
-            Text(endpoint.path.isEmpty ? "root" : endpoint.path)
+            Text("\(endpoint.action.displayString)")
+                .fontWeight(.bold)
+                .foregroundColor(endpoint.action.displayColor)
+                .frame(width: 55, height: 22, alignment: .leading)
+            Text("\(endpoint.path)")
+                .fontWeight(.semibold)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 1)
             // Change the background color if this is the current option
@@ -87,6 +92,10 @@ struct EndpointRow: View {
         // Switch to selected endpoint
         .onTapGesture {
             selectedEndpoint = endpoint
+        }.onChange(of: selectedEndpoint) { newValue in
+            if let newValue = newValue, newValue.id == endpoint.id {
+                self.endpoint = newValue
+            }
         }
     }
 }
