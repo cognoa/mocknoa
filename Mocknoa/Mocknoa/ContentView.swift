@@ -116,18 +116,6 @@ struct ServerRow: View {
     @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
     var server: Server
-    @State private var portText = ""
-
-    private var port: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .none
-        let number = NSNumber(value: server.port)
-        if let formattedValue = formatter.string(from: number) {
-            return formattedValue
-        } else {
-            return "0000"
-        }
-    }
 
     var body: some View {
         VStack {
@@ -150,7 +138,7 @@ struct ServerRow: View {
                         .font(.body)
                         .fontWeight(.semibold)
                     Spacer()
-                    Text("\(port)")
+                    Text(String(server.port))
                         .font(.body)
                         .fontWeight(.semibold)
                 } //: ELSE
@@ -161,9 +149,6 @@ struct ServerRow: View {
 //            Divider()
         } //: VSTACK
         .cornerRadius(4)
-        .onAppear {
-            portText = port
-        }
     }
 }
 
