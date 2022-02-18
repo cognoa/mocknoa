@@ -18,20 +18,24 @@ struct ServerConfigurationPane: View {
     var body: some View {
         if let currentServer = currentServer, let server = globalStateManager.getServerById(id: currentServer.id) {
             VStack {
-                VStack(alignment: .leading) {
+                GroupBox {
+                    VStack(alignment: .leading) {
                     Text("Server Name")
                         .fontWeight(.bold)
                     TextField("", text: $serverName)
+                            .cornerRadius(5)
                         .onSubmit {
                             self.globalStateManager.setName(server: currentServer, name: serverName)
                         }
                     Text("Server Port")
                         .fontWeight(.bold)
                     TextField("", text: $serverPort)
+                            .cornerRadius(5)
                         .onSubmit {
                             guard let portNumber = UInt(serverPort) else { return }
                             self.globalStateManager.setPort(server: currentServer, port: UInt(portNumber))
                         }
+                    }
                 }
                 .padding(.horizontal, 10)
                 List {
@@ -69,7 +73,7 @@ struct NewEndpointRow: View {
     @Binding var selectedEndpoint: Endpoint?
 
     var body: some View {
-        if var currentServer = currentServer {
+        if let currentServer = currentServer {
             HStack {
                 TextField("", text: $path)
                     .background(Color.gray)
@@ -88,6 +92,7 @@ struct NewEndpointRow: View {
                     Image(systemName: "plus")
                 }
             }
+            .padding(.horizontal, 8)
         }
     }
 }
@@ -102,13 +107,14 @@ struct EndpointRow: View {
                 .fontWeight(.bold)
                 .foregroundColor(endpoint.action.displayColor)
                 .frame(width: 55, height: 22, alignment: .leading)
+            Spacer()
             Text("\(endpoint.path)")
                 .fontWeight(.semibold)
-                .padding(.horizontal, 8)
+                .frame(alignment: .trailing)
                 .padding(.vertical, 1)
                 .cornerRadius(4)
-            Spacer()
         }
+        .padding(.horizontal, 3)
         // Change the background color if this is the current option
         .background {
             if selectedEndpoint == endpoint { Color.gray }

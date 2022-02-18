@@ -11,8 +11,8 @@ struct EndpointDetailView: View {
     @StateObject internal var globalStateManager: GlobalStateManager
     @Binding internal var endpoint: Endpoint?
     @Binding internal var currentServer: Server?
-    @State var httpAction: HttpAction?
-    @State private var path: String = ""
+    @State internal var httpAction: HttpAction?
+    @State private var path: String       = ""
     @State private var statusCode: String = ""
     @State private var jsonText: String = ""
     private let leadingPadding: CGFloat = 10
@@ -46,10 +46,11 @@ struct EndpointDetailView: View {
                     }
                     .padding(.leading, leadingPadding)
 
-
                 if let httpAction = httpAction {
                     HttpActionPicker(globalStateManager: globalStateManager, server: currentServer, endpoint: $endpoint, httpAction: $httpAction, localHttpAction: httpAction)
+                        .padding(.vertical, 10)
                 }
+
                 Divider()
                     .padding(.top, 10)
                 JSONInputTextEditor(
@@ -112,11 +113,11 @@ struct HttpActionPicker: View {
                 globalStateManager.updateEndpointOnServer(server: server, endpoint: localEndpoint)
             }
         })
-        .onAppear {
-            if let httpAction = httpAction {
-                localHttpAction = httpAction
+            .onAppear {
+                if let httpAction = httpAction {
+                    localHttpAction = httpAction
+                }
             }
-        }
     }
 }
 

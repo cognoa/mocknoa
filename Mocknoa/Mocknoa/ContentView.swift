@@ -110,6 +110,7 @@ struct NewServerRow: View {
                 Image(systemName: "plus")
             }
         }
+        .padding(.horizontal, 8)
     }
 }
 
@@ -118,18 +119,6 @@ struct ServerRow: View {
     @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
     var server: Server
-    @State private var portText = ""
-
-    private var port: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .none
-        let number = NSNumber(value: server.port)
-        if let formattedValue = formatter.string(from: number) {
-            return formattedValue
-        } else {
-            return "0000"
-        }
-    }
 
     var body: some View {
         VStack {
@@ -146,7 +135,7 @@ struct ServerRow: View {
 
 
                 HStack {
-                    Text("Port: \(port)")
+                    Text("Port: \(String(server.port))")
                         .font(.body)
                         .fontWeight(.semibold)
                     Spacer()
@@ -158,9 +147,6 @@ struct ServerRow: View {
 //            Divider()
         } //: VSTACK
         .cornerRadius(4)
-        .onAppear {
-            portText = port
-        }
     }
 }
 
@@ -230,5 +216,6 @@ struct ServerToolBar: View {
                     )
                 }
         } //: HSTACK
+        .padding(.bottom, 4)
     }
 }
