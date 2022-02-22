@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Lists the currently selected server's endpoints
 struct ServerConfigurationPane: View {
-    @StateObject internal var globalStateManager: GlobalStateManager
+    @EnvironmentObject internal var globalStateManager: GlobalStateManager
     @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
     @State var showNewRow = false
@@ -20,32 +20,39 @@ struct ServerConfigurationPane: View {
             VStack {
                 GroupBox {
                     VStack(alignment: .leading) {
-                    Text("Server Name")
-                        .fontWeight(.bold)
-                    TextField("", text: $serverName)
+                        Text("Server Name")
+                            .fontWeight(.bold)
+                        TextField("", text: $serverName)
                             .cornerRadius(5)
-                        .onSubmit {
-                            self.globalStateManager.setName(server: currentServer, name: serverName)
-                        }
-                    Text("Server Port")
-                        .fontWeight(.bold)
-                    TextField("", text: $serverPort)
+                            .onChange(of: serverName) { newValue in
+                                self.globalStateManager.setName(server: currentServer, name: serverName)
+                            }
+
+                        Text("Server Port")
+                            .fontWeight(.bold)
+                        TextField("", text: $serverPort)
                             .cornerRadius(5)
-                        .onSubmit {
-                            guard let portNumber = UInt(serverPort) else { return }
-                            self.globalStateManager.setPort(server: currentServer, port: UInt(portNumber))
-                        }
+                            .onChange(of: serverPort) { newValue in
+                                guard let portNumber = UInt(serverPort) else { return }
+                                self.globalStateManager.setPort(server: currentServer, port: UInt(portNumber))
+                            }
                     }
                 }
                 .padding(.horizontal, 10)
+
+                
                 List {
                     ForEach(server.sortedEndpoints, id:\.self) { endpoint in
                         EndpointRow(selectedEndpoint: $selectedEndpoint, endpoint: endpoint)
                     }
-                } //: LIST
+                }
+                .onDeleteCommand {
+                    print("Delete")
+                }
+
+
                 if showNewRow {
                     NewEndpointRow(
-                        globalStateManager: globalStateManager,
                         showNewRow: $showNewRow,
                         currentServer: $currentServer,
                         selectedEndpoint: $selectedEndpoint)
@@ -66,12 +73,16 @@ struct ServerConfigurationPane: View {
 
 /// Add new Endpoint button row
 struct NewEndpointRow: View {
-    @StateObject internal var globalStateManager: GlobalStateManager
+    private enum Field: Int, Hashable {
+        case name
+    }
+
+    @EnvironmentObject internal var globalStateManager: GlobalStateManager
     @State private var path: String = ""
     @Binding var showNewRow: Bool
     @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
-
+    @FocusState private var focusedField: Field?
     var body: some View {
         if let currentServer = currentServer {
             HStack {
@@ -79,21 +90,37 @@ struct NewEndpointRow: View {
                     .background(Color.gray)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .cornerRadius(3)
+                    .onSubmit {
+                        createEndpointOnServer(server: currentServer)
+                    }
+                    .focused($focusedField, equals: .name)
+                    .onExitCommand {
+                        showNewRow.toggle()
+                    }
                 Spacer()
                 Button {
-                    // Create new endpoint
-                    guard let endpoint = globalStateManager.createEndpointOnServerWithDefaultSettings(server: currentServer, path: path) else {
-                        showNewRow.toggle()
-                        return
-                    }
-                    selectedEndpoint = endpoint
-                    showNewRow.toggle()
+                    self.createEndpointOnServer(server: currentServer)
                 } label: {
                     Image(systemName: "plus")
                 }
             }
             .padding(.horizontal, 8)
+            .onAppear {
+                focusedField = .name
+            }
         }
+    }
+
+    private func createEndpointOnServer(server: Server) {
+        // Create new endpoint
+        guard let endpoint = globalStateManager
+                .createEndpointOnServerWithDefaultSettings(server: server, path: path)
+        else {
+            // Handle errors
+            return
+        }
+        selectedEndpoint = endpoint
+        showNewRow.toggle()
     }
 }
 

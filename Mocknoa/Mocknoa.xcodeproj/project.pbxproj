@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B72760E27C45F7500B82148 /* ResponseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72760D27C45F7500B82148 /* ResponseDetailView.swift */; };
+		6B72761027C46B7100B82148 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72760F27C46B7000B82148 /* Header.swift */; };
 		6BA6CD7827BCC7030073B315 /* Vapor in Frameworks */ = {isa = PBXBuildFile; productRef = 6BA6CD7727BCC7030073B315 /* Vapor */; };
 		6BA6CD7D27BCC8D40073B315 /* VaporFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA6CD7C27BCC8D40073B315 /* VaporFactory.swift */; };
 		6BA6CD8027BCD0330073B315 /* GlobalEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA6CD7F27BCD0330073B315 /* GlobalEnvironment.swift */; };
@@ -47,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6B72760D27C45F7500B82148 /* ResponseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseDetailView.swift; sourceTree = "<group>"; };
+		6B72760F27C46B7000B82148 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		6BA6CD7C27BCC8D40073B315 /* VaporFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaporFactory.swift; sourceTree = "<group>"; };
 		6BA6CD7F27BCD0330073B315 /* GlobalEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalEnvironment.swift; sourceTree = "<group>"; };
 		6BA6CD8127BCD0BF0073B315 /* Server.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
@@ -98,6 +102,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6B72761127C4A19300B82148 /* EndpointDetailPane */ = {
+			isa = PBXGroup;
+			children = (
+				F4734AA427BD8680007EA91B /* EndpointDetailView.swift */,
+				6B72760D27C45F7500B82148 /* ResponseDetailView.swift */,
+			);
+			path = EndpointDetailPane;
+			sourceTree = "<group>";
+		};
 		6BA6CD7B27BCC8BF0073B315 /* VaporManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +127,7 @@
 				6BA6CD8427BCD31D0073B315 /* Endpoint.swift */,
 				6BA6CD8627BCD36D0073B315 /* HttpAction.swift */,
 				6BA6CD8C27BDCD660073B315 /* UserFacingError.swift */,
+				6B72760F27C46B7000B82148 /* Header.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -193,7 +207,7 @@
 			isa = PBXGroup;
 			children = (
 				F4734AA227BD84B5007EA91B /* ServerConfigurationPane.swift */,
-				F4734AA427BD8680007EA91B /* EndpointDetailView.swift */,
+				6B72761127C4A19300B82148 /* EndpointDetailPane */,
 				F4734B3A27BDC57C007EA91B /* BottomToolBar.swift */,
 			);
 			path = Views;
@@ -343,6 +357,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B72761027C46B7100B82148 /* Header.swift in Sources */,
 				6BA6CD8927BD8EB10073B315 /* GlobalStateManager.swift in Sources */,
 				6BA6CD8D27BDCD660073B315 /* UserFacingError.swift in Sources */,
 				F4734B3E27BEDD4E007EA91B /* PanelFrame.swift in Sources */,
@@ -355,6 +370,7 @@
 				F4734AA327BD84B5007EA91B /* ServerConfigurationPane.swift in Sources */,
 				6BA6CD7D27BCC8D40073B315 /* VaporFactory.swift in Sources */,
 				6BBF88E127B19D3100391A06 /* ContentView.swift in Sources */,
+				6B72760E27C45F7500B82148 /* ResponseDetailView.swift in Sources */,
 				6BA6CD8527BCD31D0073B315 /* Endpoint.swift in Sources */,
 				6BBF88DF27B19D3100391A06 /* MocknoaApp.swift in Sources */,
 			);
@@ -530,7 +546,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = COG.Mocknoa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -558,7 +574,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = COG.Mocknoa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

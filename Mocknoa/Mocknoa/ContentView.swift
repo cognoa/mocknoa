@@ -23,19 +23,20 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             // List of Servers
-            SidebarView(globalStateManager: globalStateManager, currentServer: $currentServer, selectedEndpoint: $selectedEndpoint)
+            SidebarView(currentServer: $currentServer, selectedEndpoint: $selectedEndpoint)
                 .panelFrame(minWidth: smallPanelMinWidth, idealWidth: smallPanelIdealWidth)
+                .environmentObject(globalStateManager)
 
             // List of currentServer's endpoints
-            ServerConfigurationPane(globalStateManager: globalStateManager,
-                                    currentServer: $currentServer,
+            ServerConfigurationPane(currentServer: $currentServer,
                                     selectedEndpoint: $selectedEndpoint)
                 .panelFrame(minWidth: smallPanelMinWidth, idealWidth: largePanelMinWidth)
-
+                .environmentObject(globalStateManager
+                )
             // Endpoint configuration View
-            EndpointDetailView(globalStateManager: globalStateManager, endpoint: $selectedEndpoint, currentServer: $currentServer)
+            EndpointDetailView(endpoint: $selectedEndpoint, currentServer: $currentServer)
                 .panelFrame(minWidth: largePanelIdealWidth, idealWidth: largePanelIdealWidth + smallPanelMinWidth)
-
+                .environmentObject(globalStateManager)
         }
         .panelFrame()
         .onAppear {
@@ -46,7 +47,7 @@ struct ContentView: View {
 
 /// List of current Servers
 struct SidebarView: View {
-    @StateObject internal var globalStateManager: GlobalStateManager
+    @EnvironmentObject  internal var globalStateManager: GlobalStateManager
     @State private var isDefaultItemActive = true
     @State private var showingAlert        = false
     @State private var showNewServerRow    = false
@@ -57,26 +58,22 @@ struct SidebarView: View {
         VStack {
             List(globalStateManager.globalEnvironment.sortedServers, id: \.self, selection: $currentServer) { server in
                     ServerRow(
-                        globalStateManager: globalStateManager,
                         currentServer: $currentServer,
                         selectedEndpoint: $selectedEndpoint,
                         server: server
                     )
-                    .onTapGesture {
-                        if let currentServerLocal = self.currentServer, currentServerLocal.id != server.id {
-                            currentServer = server
-                            selectedEndpoint = nil
-                        }
-                    }
-            } //: LIST
+            }
             .listStyle(SidebarListStyle())
             .onChange(of: currentServer) { newValue in
-                selectedEndpoint = nil
+                if let newValue = newValue {
+                    print(newValue.name)
+                    currentServer = newValue
+                    selectedEndpoint = newValue.sortedEndpoints.first
+                }
             }
             Spacer()
             if showNewServerRow {
                 NewServerRow(
-                    globalStateManager: globalStateManager,
                     showNewServerRow: $showNewServerRow)
                     .padding(.horizontal, 4)
             }
@@ -89,10 +86,14 @@ struct SidebarView: View {
 
 /// Add new server button row
 struct NewServerRow: View {
-    @StateObject internal var globalStateManager: GlobalStateManager
+    private enum Field: Int, Hashable {
+        case name
+    }
+
+    @EnvironmentObject internal var globalStateManager: GlobalStateManager
     @State private var name: String = ""
     @Binding var showNewServerRow: Bool
-
+    @FocusState private var focusedField: Field?
 
     var body: some View {
         HStack {
@@ -100,21 +101,36 @@ struct NewServerRow: View {
                 .background(Color.gray)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .cornerRadius(3)
+                .onSubmit {
+                    createNewServer()
+                }
+                .focused($focusedField, equals: .name)
+                .onExitCommand {
+                    showNewServerRow.toggle()
+                }
             Spacer()
             Button {
-                // Create new server
-                globalStateManager.createAndAddNewServerConfiguration(name: name)
-                showNewServerRow.toggle()
+                createNewServer()
             } label: {
                 Image(systemName: "plus")
             }
         }
         .padding(.horizontal, 8)
+        .onAppear {
+            print("New Server Row Appeared")
+            focusedField = .name
+        }
+    }
+
+    private func createNewServer() {
+        guard !name.isEmpty else { return }
+        globalStateManager.createAndAddNewServerConfiguration(name: name)
+        showNewServerRow.toggle()
     }
 }
 
 struct ServerRow: View {
-    @StateObject internal var globalStateManager: GlobalStateManager
+    @EnvironmentObject  internal var globalStateManager: GlobalStateManager
     @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
     var server: Server
@@ -141,7 +157,7 @@ struct ServerRow: View {
                 } //: ELSE
             } //: VSTACK
             .padding(.horizontal, 4)
-            ServerToolBar(globalStateManager: globalStateManager, server: server)
+            ServerToolBar(server: server)
                 .padding(.top, 4)
 //            Divider()
         } //: VSTACK
@@ -150,7 +166,7 @@ struct ServerRow: View {
 }
 
 struct ServerToolBar: View {
-    @ObservedObject internal var globalStateManager: GlobalStateManager
+    @EnvironmentObject internal var globalStateManager: GlobalStateManager
     var server: Server
     let minSize: CGFloat = 10
     @State private var showAlert = false

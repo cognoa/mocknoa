@@ -7,3 +7,6 @@
 
 import Foundation
 
+public enum UserFacingError {
+    
+}

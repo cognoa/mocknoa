@@ -9,15 +9,31 @@ import Foundation
 import Vapor
 
 public struct Endpoint: Codable, Hashable {
+    public enum ResponseSequenceMode: String, Codable, CaseIterable, Identifiable {
+        case loopResponses
+        case random
+        case return404AfterLast
+
+        public var id: Self { self }
+
+        public var displayString: String {
+            switch self {
+            case .loopResponses: return "Loop Responses"
+            case .random: return "Random"
+            case .return404AfterLast: return "Return 404 Error After Last"
+            }
+        }
+    }
+
     public var id: String = UUID().uuidString
     public var path: String
     public var action: HttpAction
-    public var statusCode: UInt
-    public var jsonString: String
     public var creationDate = Date()
+    public var responses: [MockResponse]
+    public var responseSequenceMode: ResponseSequenceMode = .loopResponses
 
     public func defaultEndpoint() -> Endpoint {
-        return Endpoint(path: "/", action: .get, statusCode: 200, jsonString: "")
+        return Endpoint(path: "/", action: .get, responses: MockResponse.defaultResponseArray)
     }
 
     public func trimmedPath() -> String {
@@ -41,6 +57,27 @@ public struct Endpoint: Codable, Hashable {
         return pathArray.map({ component in
             return PathComponent(stringLiteral: component)
         })
+    }
+
+    public func indexOf(response: MockResponse) -> Int? {
+        for (index, tempResponse) in responses.enumerated() {
+            if tempResponse.id == response.id {
+                return index
+            }
+        }
+        return nil
+    }
+}
+
+public struct MockResponse: Codable, Hashable {
+    public var id: String = UUID().uuidString
+    public var statusCode: UInt
+    public var jsonString: String
+    public var headers: [Header] = []
+
+    public static var defaultResponseArray: [MockResponse] {
+        let mockResponse = MockResponse(statusCode: 200, jsonString: "{}")
+        return [mockResponse]
     }
 }
 

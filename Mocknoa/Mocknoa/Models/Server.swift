@@ -23,7 +23,7 @@ public struct Server: Codable, Hashable, Identifiable {
     }
 
     public static var defaultEndpoints: [String: Endpoint] {
-        let endpoint = Endpoint(path: "/", action: .get, statusCode: 200, jsonString: "Default")
+        let endpoint = Endpoint(path: "/", action: .get, responses: MockResponse.defaultResponseArray)
         return [endpoint.id: endpoint]
     }
 

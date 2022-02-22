@@ -17,14 +17,20 @@ public class GlobalSelectionStatus: Codable {
 public class GlobalStateManager: ObservableObject {
     @Published public var globalEnvironment: GlobalEnvironment
     @Published public var globalSelectionStatus: GlobalSelectionStatus
+    @Published public var endpointNextResponseIndex: [String : Int] = [:]
     @Published public var activeVaporServers: [String: Application] = [:]
     private var serverDispatchQueues: [String: DispatchQueue] = [:]
+
+    public init() {
+        self.globalEnvironment = GlobalEnvironment()
+        self.globalSelectionStatus = GlobalSelectionStatus()
+    }
 
     public func setCurrentServer(server: Server) {
         globalSelectionStatus.currentServer = server
     }
 
-    public func setName(server: Server, name: String) {
+    public func setName(server: Server, name: String) {        
         globalEnvironment.servers[server.id]?.name = name
         self.objectWillChange.send()
         saveGlobalEnvironment()
@@ -34,15 +40,6 @@ public class GlobalStateManager: ObservableObject {
         globalEnvironment.servers[server.id]?.port = port
         self.objectWillChange.send()
         saveGlobalEnvironment()
-    }
-
-    public func setSelectedEndpoint(endpoint: Endpoint) {
-        globalSelectionStatus.selectedEndpoint = endpoint
-    }
-
-    public init() {
-        self.globalEnvironment = GlobalEnvironment()
-        self.globalSelectionStatus = GlobalSelectionStatus()
     }
 
     public func addServerConfiguration(server: Server) {
@@ -75,11 +72,12 @@ public class GlobalStateManager: ObservableObject {
 extension GlobalStateManager {
     public func updateEndpointOnServer(server: Server, endpoint: Endpoint) {
         globalEnvironment.servers[server.id]?.endpointsDictionary[endpoint.id] = endpoint
+        self.objectWillChange.send()
         saveGlobalEnvironment()
     }
 
     public func createEndpointOnServerWithDefaultSettings(server: Server, path: String) -> Endpoint? {
-        let endpoint = Endpoint(path: path, action: .get, statusCode: 200, jsonString: "")
+        let endpoint = Endpoint(path: path, action: .get, responses: MockResponse.defaultResponseArray)
         guard globalEnvironment.servers[server.id] != nil else {
             return nil
         }
@@ -92,7 +90,70 @@ extension GlobalStateManager {
         guard let server = getServerById(id: server.id) else { return nil }
         return server.endpointsDictionary[id]
     }
+
+    public func serverContaining(endpoint: Endpoint) -> Server? {
+        for server in Array(globalEnvironment.servers.values) {
+            if !server.endpoints.filter({ $0.id == endpoint.id }).isEmpty {
+                return server
+            }
+        }
+        return nil
+    }
 }
+
+// MARK: Endpoint Response Maangement
+extension GlobalStateManager {
+    public func createNewResponseOn(endpoint: Endpoint) {
+        guard let localServer = serverContaining(endpoint: endpoint),
+              let newResponse = MockResponse.defaultResponseArray.first
+        else {
+            // Add error handling
+            return
+        }
+        globalEnvironment.servers[localServer.id]?.endpointsDictionary[endpoint.id]?.responses.append(newResponse)
+        self.objectWillChange.send()
+        saveGlobalEnvironment()
+    }
+
+    public func deleteResponseFromEndpoint(endpoint: Endpoint, response: MockResponse) {
+        guard let localServer = serverContaining(endpoint: endpoint),
+              let localEndpoint = getEndpointBy(id: endpoint.id, server: localServer),
+              localEndpoint.responses.count > 1
+        else {
+            // Add Error Handling
+            return
+        }
+        let newResponseArray = localEndpoint.responses.filter({ $0.id != response.id })
+        globalEnvironment.servers[localServer.id]?.endpointsDictionary[endpoint.id]?.responses = newResponseArray
+    }
+
+    fileprivate func resetEndpointResponseIndexesFor(server: Server) {
+        for endpoint in server.endpoints {
+            endpointNextResponseIndex[endpoint.id] = 0
+        }
+    }
+
+    private func nextResponseIndexFor(endpoint: Endpoint) -> Int? {
+        return endpointNextResponseIndex[endpoint.id]
+    }
+
+    public func nextMockResponseForEndpoint(_ endpoint: Endpoint) -> MockResponse? {
+        guard !endpoint.responses.isEmpty, let nextIndex = nextResponseIndexFor(endpoint: endpoint) else { return nil }
+
+        if endpoint.responses.count == 1 {
+            return endpoint.responses[0]
+        } else {
+            if nextIndex == endpoint.responses.count - 1 {
+                endpointNextResponseIndex[endpoint.id] = 0
+                return endpoint.responses[nextIndex]
+            } else {
+                endpointNextResponseIndex[endpoint.id] = nextIndex + 1
+                return endpoint.responses[nextIndex]
+            }
+        }
+    }
+}
+
 
 // MARK: Persistence and LifeCycle
 extension GlobalStateManager {
@@ -114,13 +175,14 @@ extension GlobalStateManager {
             return
         }
 
-        VaporFactory.generateServer(server: server) { app, queue, error in
+        VaporFactory.generateServer(globalStateManager: self, server: server) { app, queue, error in
             if let error = error {
                 print("Error generating server \(error)")
             } else if let app = app {
                 DispatchQueue.main.async {
                     self.activeVaporServers[server.id] = app
                     self.serverDispatchQueues[server.id] = queue
+                    self.resetEndpointResponseIndexesFor(server: server)
                     self.objectWillChange.send()
                 }
             }
@@ -142,6 +204,7 @@ extension GlobalStateManager {
             activeServer.shutdown()
         }
         activeVaporServers.removeValue(forKey: server.id)
+        resetEndpointResponseIndexesFor(server: server)
         self.objectWillChange.send()
     }
 

@@ -12,8 +12,7 @@ import SwiftUI
 public class VaporFactory {
     public static var dispatchQueues: [String: DispatchQueue] = [:]
     public static var loggingInstantiated: Bool = false
-
-    public static func generateServer(server: Server, completion: @escaping (Application?, DispatchQueue, Error?) -> Void) {
+    public static func generateServer(globalStateManager: GlobalStateManager, server: Server, completion: @escaping (Application?, DispatchQueue, Error?) -> Void) {
         let serverQueue = DispatchQueue(label: server.id, attributes: .concurrent)
         dispatchQueues[server.id] = serverQueue
         serverQueue.async {
@@ -24,7 +23,7 @@ public class VaporFactory {
                 }
                 loggingInstantiated = true
                 let app = Application(env)
-                try configure(app: app, server: server)
+                try configure(globalStateManager: globalStateManager, app: app, server: server)
                 completion(app, serverQueue, nil)
                 try app.run()
             } catch {
@@ -33,59 +32,70 @@ public class VaporFactory {
         }
     }
 
-    public static func configure( app: Application, server: Server) throws {
+    public static func configure(globalStateManager: GlobalStateManager, app: Application, server: Server) throws {
         app.http.server.configuration.port = Int(server.port)
-        try routes(app: app, server: server)
+        try routes(globalStateManager: globalStateManager, app: app, server: server)
     }
 
-    public static func routes(app: Application, server: Server) throws {
-        generateRoutes(app: app, server: server)
+    public static func routes(globalStateManager: GlobalStateManager, app: Application, server: Server) throws {
+        generateRoutes(globalStateManager: globalStateManager, app: app, server: server)
     }
 
-    private static func generateRoutes(app: Application, server: Server) {
+    private static func generateRoutes(globalStateManager: GlobalStateManager, app: Application, server: Server) {
         let getEndpoints = server.endpoints.getEndpoints
         let postEndpoints = server.endpoints.postEndpoints
         let patchEndpoints = server.endpoints.patchEndpoints
         let deleteEndpoints = server.endpoints.deleteEndpoints
 
-        generateGetRoutes(app: app, server: server, endPoints: getEndpoints)
-        generatePostRoutes(app: app, server: server, endPoints: postEndpoints)
-        generatePatchRoutes(app: app, server: server, endPoints: patchEndpoints)
-        generateDeleteRoutes(app: app, server: server, endPoints: deleteEndpoints)
+        generateGetRoutes(globalStateManager: globalStateManager, app: app, server: server, endPoints: getEndpoints)
+        generatePostRoutes(globalStateManager: globalStateManager, app: app, server: server, endPoints: postEndpoints)
+        generatePatchRoutes(globalStateManager: globalStateManager, app: app, server: server, endPoints: patchEndpoints)
+        generateDeleteRoutes(globalStateManager: globalStateManager, app: app, server: server, endPoints: deleteEndpoints)
         print("Routes")
         print(app.routes)
     }
 
-    private static func generateGetRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+    private static func generateGetRoutes(globalStateManager: GlobalStateManager, app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
-            app.get(endpoint.pathComponents) { _ in
-                return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
+            app.get(endpoint.pathComponents)  { req in
+                return generateNextResponseFor(globalStateManager: globalStateManager, endpoint: endpoint)
             }
         }
     }
 
-    private static func generatePostRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+    private static func generatePostRoutes(globalStateManager: GlobalStateManager, app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
             app.post(endpoint.pathComponents) { _ in
-                return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
+                return generateNextResponseFor(globalStateManager: globalStateManager, endpoint: endpoint)
             }
         }
     }
 
-    private static func generatePatchRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+    private static func generatePatchRoutes(globalStateManager: GlobalStateManager, app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
             app.patch(endpoint.pathComponents) { _ in
-                return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
+                return generateNextResponseFor(globalStateManager: globalStateManager, endpoint: endpoint)
             }
         }
     }
 
-    private static func generateDeleteRoutes(app: Application, server: Server, endPoints: [Endpoint]) {
+    private static func generateDeleteRoutes(globalStateManager: GlobalStateManager, app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
             app.delete(endpoint.pathComponents) { _ in
-                return Response(status: .custom(code: endpoint.statusCode, reasonPhrase: ""), body: .init(string: endpoint.jsonString))
+                return generateNextResponseFor(globalStateManager: globalStateManager, endpoint: endpoint)
             }
         }
     }
 
+    private static func responseNotFound(endPoint: Endpoint) -> Response {
+        Response(status: .notFound, body: .init(string: "No response found for requested resource at route \(endPoint.path)"))
+    }
+
+    private static func generateNextResponseFor(globalStateManager: GlobalStateManager, endpoint: Endpoint) -> Response {
+        var response = responseNotFound(endPoint: endpoint)
+        if let nextMockResponse = globalStateManager.nextMockResponseForEndpoint(endpoint) {
+            response = Response(status: .custom(code: nextMockResponse.statusCode, reasonPhrase: ""), body: .init(string: nextMockResponse.jsonString))
+        }
+        return response
+    }
 }
