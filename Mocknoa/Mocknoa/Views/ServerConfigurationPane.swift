@@ -40,12 +40,13 @@ struct ServerConfigurationPane: View {
                 }
                 .padding(.horizontal, 10)
 
-                
-                List {
-                    ForEach(server.sortedEndpoints, id:\.self) { endpoint in
-                        EndpointRow(selectedEndpoint: $selectedEndpoint, endpoint: endpoint)
-                    }
+                List(currentServer.endpoints, id: \.self, selection: $selectedEndpoint) { endpoint in
+                    EndpointRow(selectedEndpoint: $selectedEndpoint, endpoint: endpoint)
+                        .onTapGesture {
+                            selectedEndpoint = endpoint
+                        }
                 }
+                .listStyle(.plain)
                 .onDeleteCommand {
                     print("Delete")
                 }
@@ -58,6 +59,7 @@ struct ServerConfigurationPane: View {
                         selectedEndpoint: $selectedEndpoint)
                         .padding(.horizontal, 8)
                 }
+
                 BottomToolBar(showNewRow: $showNewRow)
             }.onAppear {
                 serverName = currentServer.name
@@ -68,6 +70,53 @@ struct ServerConfigurationPane: View {
                 serverPort = String(localCurrentServer.port)
             }
         }
+    }
+}
+
+struct EndpointRow: View {
+    @Binding internal var selectedEndpoint: Endpoint?
+    @State internal var endpoint: Endpoint
+    @State private var isTargeted = true
+
+    var body: some View {
+        HStack {
+            Text("\(endpoint.action.displayString)")
+                .fontWeight(.bold)
+                .foregroundColor(endpoint.action.displayColor)
+                .frame(width: 55, height: 22, alignment: .leading)
+            Spacer()
+            Text("\(endpoint.path)")
+                .fontWeight(.semibold)
+                .frame(alignment: .trailing)
+                .padding(.vertical, 1)
+                .cornerRadius(4)
+        }
+        .padding(.horizontal, 3)
+        .cornerRadius(4)
+        // Needed to make the entire VStack tappable for `onTapGesture` to work
+        .contentShape(Rectangle())
+        // Switch to selected endpoint
+        .onChange(of: selectedEndpoint) { newValue in
+            if let newValue = newValue, newValue.id == endpoint.id {
+                self.endpoint = newValue
+            }
+        }.onDrag {
+            print("Did Drag")
+            var item = NSItemProvider(object: NSString(string: endpoint.id))
+            item.suggestedName = endpoint.id
+            return item
+        }
+        .onDrop(of: ["public.utf8-plain-text"], isTargeted: $isTargeted) { provider in
+            print("Did drop")
+            print(provider.first)
+            guard let endpointSwapping = provider.first, let id = endpointSwapping.suggestedName else {
+                return false
+            }
+            print("Swapping ID: \(id)")
+            print("Current Endpoint ID: \(self.endpoint.id)")
+            return false
+        }
+
     }
 }
 
@@ -83,6 +132,7 @@ struct NewEndpointRow: View {
     @Binding var currentServer: Server?
     @Binding var selectedEndpoint: Endpoint?
     @FocusState private var focusedField: Field?
+    
     var body: some View {
         if let currentServer = currentServer {
             HStack {
@@ -121,41 +171,5 @@ struct NewEndpointRow: View {
         }
         selectedEndpoint = endpoint
         showNewRow.toggle()
-    }
-}
-
-struct EndpointRow: View {
-    @Binding internal var selectedEndpoint: Endpoint?
-    @State internal var endpoint: Endpoint
-
-    var body: some View {
-        HStack {
-            Text("\(endpoint.action.displayString)")
-                .fontWeight(.bold)
-                .foregroundColor(endpoint.action.displayColor)
-                .frame(width: 55, height: 22, alignment: .leading)
-            Spacer()
-            Text("\(endpoint.path)")
-                .fontWeight(.semibold)
-                .frame(alignment: .trailing)
-                .padding(.vertical, 1)
-                .cornerRadius(4)
-        }
-        .padding(.horizontal, 3)
-        // Change the background color if this is the current option
-        .background {
-            if selectedEndpoint == endpoint { Color.gray }
-        }
-        .cornerRadius(4)
-        // Needed to make the entire VStack tappable for `onTapGesture` to work
-        .contentShape(Rectangle())
-        // Switch to selected endpoint
-        .onTapGesture {
-            selectedEndpoint = endpoint
-        }.onChange(of: selectedEndpoint) { newValue in
-            if let newValue = newValue, newValue.id == endpoint.id {
-                self.endpoint = newValue
-            }
-        }
     }
 }

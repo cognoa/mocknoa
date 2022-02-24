@@ -21,6 +21,8 @@ public class GlobalStateManager: ObservableObject {
     @Published public var activeVaporServers: [String: Application] = [:]
     private var serverDispatchQueues: [String: DispatchQueue] = [:]
 
+
+
     public init() {
         self.globalEnvironment = GlobalEnvironment()
         self.globalSelectionStatus = GlobalSelectionStatus()
@@ -107,6 +109,7 @@ extension GlobalStateManager {
         guard let localServer = serverContaining(endpoint: endpoint),
               let newResponse = MockResponse.defaultResponseArray.first
         else {
+            print("Unable to create new response")
             // Add error handling
             return
         }
@@ -140,12 +143,22 @@ extension GlobalStateManager {
     public func nextMockResponseForEndpoint(_ endpoint: Endpoint) -> MockResponse? {
         guard !endpoint.responses.isEmpty, let nextIndex = nextResponseIndexFor(endpoint: endpoint) else { return nil }
 
-        if endpoint.responses.count == 1 {
+        if endpoint.responseSequenceMode == .random {
+            return endpoint.responses.randomElement()
+        }
+
+        if endpoint.responses.count == 1 && endpoint.responseSequenceMode == .loopResponses {
             return endpoint.responses[0]
         } else {
             if nextIndex == endpoint.responses.count - 1 {
-                endpointNextResponseIndex[endpoint.id] = 0
+                if endpoint.responseSequenceMode == .loopResponses {
+                    endpointNextResponseIndex[endpoint.id] = 0
+                } else {
+                    endpointNextResponseIndex[endpoint.id] = nextIndex + 1
+                }
                 return endpoint.responses[nextIndex]
+            } else if nextIndex >= endpoint.responses.count && endpoint.responseSequenceMode == .return404AfterLast {
+                return MockResponse.endOfResponses404
             } else {
                 endpointNextResponseIndex[endpoint.id] = nextIndex + 1
                 return endpoint.responses[nextIndex]

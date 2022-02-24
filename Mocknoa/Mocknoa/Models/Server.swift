@@ -37,6 +37,10 @@ public struct Server: Codable, Hashable, Identifiable {
         }
         return 0
     }
+
+    public func addEndpoint(_ endpoint: Endpoint) {
+
+    }
 }
 
 extension Array where Element == Server {

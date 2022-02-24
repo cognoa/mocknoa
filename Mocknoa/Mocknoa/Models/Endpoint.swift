@@ -31,6 +31,7 @@ public struct Endpoint: Codable, Hashable {
     public var creationDate = Date()
     public var responses: [MockResponse]
     public var responseSequenceMode: ResponseSequenceMode = .loopResponses
+    public var rankIndex: Int = 0
 
     public func defaultEndpoint() -> Endpoint {
         return Endpoint(path: "/", action: .get, responses: MockResponse.defaultResponseArray)
@@ -66,18 +67,6 @@ public struct Endpoint: Codable, Hashable {
             }
         }
         return nil
-    }
-}
-
-public struct MockResponse: Codable, Hashable {
-    public var id: String = UUID().uuidString
-    public var statusCode: UInt
-    public var jsonString: String
-    public var headers: [Header] = []
-
-    public static var defaultResponseArray: [MockResponse] {
-        let mockResponse = MockResponse(statusCode: 200, jsonString: "{}")
-        return [mockResponse]
     }
 }
 

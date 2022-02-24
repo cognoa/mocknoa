@@ -58,7 +58,7 @@ public class VaporFactory {
     private static func generateGetRoutes(globalStateManager: GlobalStateManager, app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
             app.get(endpoint.pathComponents)  { req in
-                return generateNextResponseFor(globalStateManager: globalStateManager, endpoint: endpoint)
+                return generateNextResponseFor(globalStateManager: globalStateManager, server: server, endpoint: endpoint)
             }
         }
     }
@@ -66,7 +66,7 @@ public class VaporFactory {
     private static func generatePostRoutes(globalStateManager: GlobalStateManager, app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
             app.post(endpoint.pathComponents) { _ in
-                return generateNextResponseFor(globalStateManager: globalStateManager, endpoint: endpoint)
+                return generateNextResponseFor(globalStateManager: globalStateManager, server: server, endpoint: endpoint)
             }
         }
     }
@@ -74,7 +74,7 @@ public class VaporFactory {
     private static func generatePatchRoutes(globalStateManager: GlobalStateManager, app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
             app.patch(endpoint.pathComponents) { _ in
-                return generateNextResponseFor(globalStateManager: globalStateManager, endpoint: endpoint)
+                return generateNextResponseFor(globalStateManager: globalStateManager, server: server, endpoint: endpoint)
             }
         }
     }
@@ -82,7 +82,7 @@ public class VaporFactory {
     private static func generateDeleteRoutes(globalStateManager: GlobalStateManager, app: Application, server: Server, endPoints: [Endpoint]) {
         endPoints.forEach { endpoint in
             app.delete(endpoint.pathComponents) { _ in
-                return generateNextResponseFor(globalStateManager: globalStateManager, endpoint: endpoint)
+                return generateNextResponseFor(globalStateManager: globalStateManager, server: server, endpoint: endpoint)
             }
         }
     }
@@ -91,7 +91,7 @@ public class VaporFactory {
         Response(status: .notFound, body: .init(string: "No response found for requested resource at route \(endPoint.path)"))
     }
 
-    private static func generateNextResponseFor(globalStateManager: GlobalStateManager, endpoint: Endpoint) -> Response {
+    private static func generateNextResponseFor(globalStateManager: GlobalStateManager, server: Server, endpoint: Endpoint) -> Response {
         var response = responseNotFound(endPoint: endpoint)
         if let nextMockResponse = globalStateManager.nextMockResponseForEndpoint(endpoint) {
             response = Response(status: .custom(code: nextMockResponse.statusCode, reasonPhrase: ""), body: .init(string: nextMockResponse.jsonString))

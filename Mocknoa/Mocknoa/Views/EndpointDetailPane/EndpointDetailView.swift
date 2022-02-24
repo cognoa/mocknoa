@@ -14,16 +14,26 @@ struct EndpointDetailView: View {
     @State internal var httpAction: HttpAction?
     @State internal var sequenceMode: Endpoint.ResponseSequenceMode?
     @State private var path: String = ""
-    static let leadingPadding: CGFloat = 10
     @State var selectedResponse: MockResponse?
+
+    static let leadingPadding: CGFloat = 10
 
     var body: some View {
         if let endpoint = endpoint, let currentServer = currentServer {
             VStack (alignment: .leading) {
                 GroupBox {
                     VStack (alignment: .leading) {
-                        Text("Path: ")
-                            .padding(.leading, Self.leadingPadding)
+                        HStack{
+                            Text("Path: ")
+                                .padding(.leading, Self.leadingPadding)
+                            Spacer()
+                            Button {
+                                PasteboardUtilities.addEndpointFullHttpPathToPasteboard(server: currentServer, endPoint: endpoint)
+                            } label: {
+                                Text("Copy to Clipboard")
+                            }
+
+                        }
                         TextField("New path", text: $path)
                             .background(Color.gray)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -55,8 +65,7 @@ struct EndpointDetailView: View {
                 Divider()
                     .padding(.top, 10)
 
-
-                ResponseTabView(endpoint: $endpoint, selectedResponse: $selectedResponse)
+                ResponseTabView(server: currentServer, endpoint: $endpoint, selectedResponse: $selectedResponse)
                 ResponseDetailView(currentServer: $currentServer, endpoint: $endpoint, selectedResponse: $selectedResponse)
             }
             .padding(.top, 10)
@@ -72,6 +81,8 @@ struct EndpointDetailView: View {
                 if let globalEndpoint = globalStateManager.getEndpointBy(id: endpoint.id, server: currentServer) {
                     path = globalEndpoint.path
                     httpAction = globalEndpoint.action
+                    sequenceMode = globalEndpoint.responseSequenceMode
+                    selectedResponse = globalEndpoint.responses.first
                 }
             }
         }
@@ -93,23 +104,30 @@ struct HttpActionPicker: View {
     @State internal var localHttpAction: HttpAction
 
     var body: some View {
-        Text("HTTP Action:")
-            .padding(.leading, 10)
-        Picker("", selection: $localHttpAction) {
-            ForEach(HttpAction.allCases) { action in
-                Text(action.rawValue.capitalized)
+        VStack(alignment: .leading) {
+            Text("HTTP Action:")
+                .padding(.leading, 10)
+
+            Picker("", selection: $localHttpAction) {
+                ForEach(HttpAction.allCases) { action in
+                    Text(action.rawValue.capitalized)
+                }
+            }.onChange(of: localHttpAction, perform: { action in
+                if var localEndpoint = endpoint {
+                    localHttpAction = action
+                    httpAction = action
+                    endpoint?.action = action
+                    localEndpoint.action = action
+                    globalStateManager.updateEndpointOnServer(server: server, endpoint: localEndpoint)
+                }
+            }).onAppear {
+                if let httpAction = httpAction {
+                    localHttpAction = httpAction
+                }
             }
-        }.onChange(of: localHttpAction, perform: { action in
-            if var localEndpoint = endpoint {
-                localHttpAction = action
-                httpAction = action
-                endpoint?.action = action
-                localEndpoint.action = action
-                globalStateManager.updateEndpointOnServer(server: server, endpoint: localEndpoint)
-            }
-        }).onAppear {
-            if let httpAction = httpAction {
-                localHttpAction = httpAction
+        }.onChange(of: endpoint) { newValue in
+            if let newValue = newValue {
+                localHttpAction = newValue.action
             }
         }
     }
@@ -123,30 +141,37 @@ struct ResponseSequenceModePicker: View {
     @State internal var localSequenceMode: Endpoint.ResponseSequenceMode
 
     var body: some View {
-        Text("Response Sequence Mode:")
-            .padding(.leading, 10)
-        Picker("", selection: $localSequenceMode) {
-            ForEach(Endpoint.ResponseSequenceMode.allCases) { sequenceMode in
-                Text(sequenceMode.displayString)
+        VStack(alignment: .leading) {
+            Text("Response Sequence Mode:")
+                .padding(.leading, 10)
+            Picker("", selection: $localSequenceMode) {
+                ForEach(Endpoint.ResponseSequenceMode.allCases) { sequenceMode in
+                    Text(sequenceMode.displayString)
+                }
+            }.onChange(of: localSequenceMode, perform: { mode in
+                if var localEndpoint = endpoint {
+                    localSequenceMode = mode
+                    sequenceMode = mode
+                    endpoint?.responseSequenceMode = mode
+                    localEndpoint.responseSequenceMode = mode
+                    globalStateManager.updateEndpointOnServer(server: server, endpoint: localEndpoint)
+                }
+            }).onAppear {
+                if let sequenceMode = sequenceMode {
+                    localSequenceMode = sequenceMode
+                }
             }
-        }.onChange(of: localSequenceMode, perform: { sequenceMode in
-            if var localEndpoint = endpoint {
-                localSequenceMode = sequenceMode
-                self.sequenceMode = sequenceMode
-                endpoint?.responseSequenceMode = sequenceMode
-                localEndpoint.responseSequenceMode = sequenceMode
-                globalStateManager.updateEndpointOnServer(server: server, endpoint: localEndpoint)
-            }
-        }).onAppear {
-            if let sequenceMode = sequenceMode {
-                localSequenceMode = sequenceMode
+        }.onChange(of: endpoint) { newValue in
+            if let newValue = newValue {
+                localSequenceMode = newValue.responseSequenceMode
             }
         }
     }
-
 }
 
 struct ResponseTabView: View {
+    @EnvironmentObject internal var globalStateManager: GlobalStateManager
+    internal var server: Server
     @Binding internal var endpoint: Endpoint?
     @Binding internal var selectedResponse: MockResponse?
     var body: some View {
@@ -157,13 +182,18 @@ struct ResponseTabView: View {
                         ForEach(Array(endpoint.responses).indices, id: \.self) { index in
                             if let response = endpoint.responses[index] {
                                 ResponseTab(endpoint: $endpoint, selectedResponse: $selectedResponse, index: index, response: response)
+                                    .onTapGesture {
+                                        selectedResponse = response
+                                    }
                             }
                         }
                     }
                 }
 
                 Button {
+                    globalStateManager.createNewResponseOn(endpoint: endpoint)
                     print("New Response")
+
                 } label: {
                     Image(systemName: "play.circle.fill")
                         .aspectRatio(contentMode: .fill)
@@ -181,10 +211,7 @@ struct ResponseTab: View {
     internal var response: MockResponse
 
     private var tabText: String {
-//        guard let endpoint = endpoint else { return "Response" }
-//        if endpoint.responses.count > 1 { return "Response \(index)" }
         return "Response \(index + 1)"
-//        else { return "Response" }
     }
 
     var body: some View {
@@ -196,10 +223,6 @@ struct ResponseTab: View {
                 .padding(.top, 7)
                 .padding(.bottom, 10)
 
-        }
-//        .frame(width: 75, height: 60)
-        .onTapGesture {
-            selectedResponse = response
         }
         .background(.yellow)
     }

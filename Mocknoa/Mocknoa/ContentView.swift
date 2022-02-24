@@ -63,12 +63,12 @@ struct SidebarView: View {
                         server: server
                     )
             }
-            .listStyle(SidebarListStyle())
+            .listStyle(.sidebar)
             .onChange(of: currentServer) { newValue in
                 if let newValue = newValue {
                     print(newValue.name)
                     currentServer = newValue
-                    selectedEndpoint = newValue.sortedEndpoints.first
+                    selectedEndpoint = newValue.endpoints.first
                 }
             }
             Spacer()
@@ -81,51 +81,6 @@ struct SidebarView: View {
             // Bottom add server button row
             BottomToolBar(showNewRow: $showNewServerRow)
         }
-    }
-}
-
-/// Add new server button row
-struct NewServerRow: View {
-    private enum Field: Int, Hashable {
-        case name
-    }
-
-    @EnvironmentObject internal var globalStateManager: GlobalStateManager
-    @State private var name: String = ""
-    @Binding var showNewServerRow: Bool
-    @FocusState private var focusedField: Field?
-
-    var body: some View {
-        HStack {
-            TextField("", text: $name)
-                .background(Color.gray)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .cornerRadius(3)
-                .onSubmit {
-                    createNewServer()
-                }
-                .focused($focusedField, equals: .name)
-                .onExitCommand {
-                    showNewServerRow.toggle()
-                }
-            Spacer()
-            Button {
-                createNewServer()
-            } label: {
-                Image(systemName: "plus")
-            }
-        }
-        .padding(.horizontal, 8)
-        .onAppear {
-            print("New Server Row Appeared")
-            focusedField = .name
-        }
-    }
-
-    private func createNewServer() {
-        guard !name.isEmpty else { return }
-        globalStateManager.createAndAddNewServerConfiguration(name: name)
-        showNewServerRow.toggle()
     }
 }
 
@@ -232,5 +187,49 @@ struct ServerToolBar: View {
                 }
         } //: HSTACK
         .padding(.bottom, 4)
+    }
+}
+
+/// Add new server button row
+struct NewServerRow: View {
+    private enum Field: Int, Hashable {
+        case name
+    }
+
+    @EnvironmentObject internal var globalStateManager: GlobalStateManager
+    @State private var name: String = ""
+    @Binding var showNewServerRow: Bool
+    @FocusState private var focusedField: Field?
+
+    var body: some View {
+        HStack {
+            TextField("", text: $name)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .cornerRadius(3)
+                .onSubmit {
+                    createNewServer()
+                }
+                .focused($focusedField, equals: .name)
+                .onExitCommand {
+                    showNewServerRow.toggle()
+                }
+            Spacer()
+            Button {
+                createNewServer()
+            } label: {
+                Image(systemName: "plus")
+            }
+        }
+        .padding(.horizontal, 8)
+        .onAppear {
+            print("New Server Row Appeared")
+            focusedField = .name
+        }
+    }
+
+    private func createNewServer() {
+        guard !name.isEmpty else { return }
+        globalStateManager.createAndAddNewServerConfiguration(name: name)
+        showNewServerRow.toggle()
     }
 }
